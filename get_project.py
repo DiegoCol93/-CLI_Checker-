@@ -4,7 +4,6 @@ from sys import argv as av
 from requests import get
 from os import environ, path
 
-
 def get_tasks():
     """ Prints all of the ids of the tasks in the given project. """
     if len(av) != 2:
