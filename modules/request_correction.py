@@ -21,4 +21,5 @@ def request_correction(task):
 
     request_result = response.json()
 
+    print(request_result)
     return request_result['id']
