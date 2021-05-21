@@ -1,31 +1,24 @@
 #!/usr/bin/python3
 """ Module for printing the id of all tasks of current project. """
-from sys import argv as av
 from requests import post
-from os import environ
+from os import path
 
 
-def request_correction():
+def request_correction(task):
     """ Prints all of the ids of the tasks in the given project. """
-    if len(av) != 2:
-        print("usage...")
-        exit()
 
     if path.exists('/tmp/.hbnb_auth_token') is None:
         print("No /tmp/.hbnb_auth_token file...")
-        exit()
+        return
 
     with open('/tmp/.hbnb_auth_token', 'r') as f:
         auth = f.read()
 
     url = "https://intranet.hbtn.io/tasks/{}/start_correction.json?auth_token={}" \
-    .format(av[1], auth)
+    .format(task, auth)
 
     response = post(url, data='')
 
     request_result = response.json()
 
-    print(request_result)
-
-if __name__ == '__main__':
-    request_correction()
+    return request_result['id']

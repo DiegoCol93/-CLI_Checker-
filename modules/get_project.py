@@ -5,21 +5,18 @@ from requests import get
 from os import environ, path
 
 
-def get_tasks():
+def get_tasks(project_number):
     """ Prints all of the ids of the tasks in the given project. """
-    if len(av) != 2:
-        print("usage...")
-        exit()
 
     if path.exists('/tmp/.hbnb_auth_token') is None:
         print("No /tmp/.hbnb_auth_token file...")
-        exit()
+        return
 
     with open('/tmp/.hbnb_auth_token', 'r') as f:
         auth = f.read()
 
     url = "https://intranet.hbtn.io/projects/{}.json?auth_token={}" \
-    .format(av[1], auth)
+        .format(project_number, auth)
 
     response = get(url)
 
@@ -27,13 +24,10 @@ def get_tasks():
         tasks = response.json()['tasks']
     except Exception as e:
         print(e)
-        exit()
+        return
 
     number = 0
     for task in tasks:
         print('{}. - {} id: '.format(number, task['title']), end='')
         print('{}'.format(task['id']))
         number += 1
-
-if __name__ == '__main__':
-    get_tasks()

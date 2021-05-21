@@ -3,28 +3,27 @@
 from sys import argv as av
 from requests import get
 from os import path
+from tqdm import tqdm
 
 
-def show_result():
+def show_result(correction_id='5028906'):
     """ Prints the result of the correction """
-
-    if len(av) != 2:
-        print("usage...")
-        exit()
 
     if path.exists('/tmp/.hbnb_auth_token') is None:
         print("No /tmp/.hbnb_auth_token file...")
-        exit()
+        return
 
     with open('/tmp/.hbnb_auth_token', 'r') as f:
         auth = f.read()
 
     url = 'https://intranet.hbtn.io/correction_requests/{}.json?auth_token={}' \
-    .format(av[1], auth)
+        .format(correction_id, auth)
 
     response = get(url)
 
+    for i in tqdm(range(10000)):
+        pass
     print(response.json())
 
-if __name__ == '__main__':
-    show_result()
+
+show_result()

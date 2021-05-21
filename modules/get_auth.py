@@ -1,29 +1,21 @@
 #!/usr/bin/python3
 """ Module for storing the get_auth method. """
-from os import environ, path
-from sys import argv as av
 from requests import post
+from os import path
 
 
-def get_auth():
+def get_auth(email=None, api=None, password=None):
     """ Gets the authentication token for the current user. """
     # If wrong number of arguments were passed print usage.
-    if len(av) != 4:
-        print("\n"
-              "\t┌ Usage:         Argv: ┬ 1       ┬ 2     ┬ 3        ┐\n"
-              "\t│                      │         │       │          │\n"
-              "\t│                      │   ⚡    │  ⚡   │    ⚡    │\n"
-              "\t└─────── ./get_auth.py │ API_key │ email │ password │\n"
-              "\t                       └─────────┴───────┴──────────┘\n")
-        exit()
+    if email is None or api is None or password is None:
+        return
 
     if path.exists('/tmp/.hbnb_auth_token'):
-        exit()
-
+        return
     url = "https://intranet.hbtn.io/users/auth_token.json"
 
-    payload = {'api_key': av[1], 'email': av[2],
-               'password': av[3], 'scope': 'checker'}
+    payload = {'api_key': api, 'email': email,
+               'password': password, 'scope': 'checker'}
 
     response = post(url, data=payload)
 
@@ -31,6 +23,3 @@ def get_auth():
 
     with open('/tmp/.hbnb_auth_token', 'w') as f:
         f.write(auth)
-
-if __name__ == '__main__':
-    get_auth()
