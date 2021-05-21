@@ -1,18 +1,37 @@
 #!/usr/bin/python3
-""" Module for getting authentication token for the user. """
-from requests import post
+""" Module for storing the get_auth method. """
 from sys import argv as av
+from requests import post
 from os import environ
 
-if len(av) != 4:
-    print("\n\tUsage: ./get_auth.py <API key> <holberton email> <password>\n")
-    exit()
 
-payload = { 'api_key': av[1],
-            'email': av[2],
-            'password': av[3],
-            'scope': 'checker' }
+def get_auth():
+    """ Gets the authentication token for the current user. """
+    # If wrong number of arguments were passed print usage.
+    if len(av) != 4:
+        print("\n"
+              "\t┌ Usage:         Argv: ┬ 1       ┬ 2     ┬ 3        ┐\n"
+              "\t│                      │         │       │          │\n"
+              "\t│                      │   ⚡    │  ⚡   │    ⚡    │\n"
+              "\t└─────── ./get_auth.py │ API_key │ email │ password │\n"
+              "\t                       └─────────┴───────┴──────────┘\n")
+        exit()
 
-response = post("https://intranet.hbtn.io/users/auth_token.json", data=payload)
+    if environ.get('HBNB_AUTH'):
+        exit()
 
-print(response.json())
+    url = "https://intranet.hbtn.io/users/auth_token.json"
+
+    payload = {'api_key': av[1], 'email': av[2],
+               'password': av[3], 'scope': 'checker'}
+
+    response = post(url, data=payload)
+
+    auth = response.json()['auth_token']
+
+    environ['HBNB_AUTH'] = auth
+
+    print(auth)
+
+if __name__ == '__main__':
+    get_auth()
