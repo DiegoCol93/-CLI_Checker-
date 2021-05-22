@@ -6,12 +6,13 @@ from os import path
 
 def get_auth(email=None, api=None, password=None):
     """ Gets the authentication token for the current user. """
-    # If wrong number of arguments were passed print usage.
+
     if email is None or api is None or password is None:
         return
 
     if path.exists('/tmp/.hbnb_auth_token'):
         return
+
     url = "https://intranet.hbtn.io/users/auth_token.json"
 
     payload = {'api_key': api, 'email': email,
