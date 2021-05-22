@@ -8,7 +8,8 @@ def get_auth(email=None, api=None, password=None):
     """ Gets the authentication token for the current user. """
 
     if email is None or api is None or password is None:
-        return
+        print('No email, api_key or password given.')
+        return False
 
     if path.exists('/tmp/.hbnb_auth_token'):
         return
@@ -20,7 +21,19 @@ def get_auth(email=None, api=None, password=None):
 
     response = post(url, data=payload)
 
-    auth = response.json()['auth_token']
+    status = response.status_code
 
-    with open('/tmp/.hbnb_auth_token', 'w') as f:
-        f.write(auth)
+    result = {}
+
+    if status == 200:
+        auth = response.json()['auth_token']
+
+        with open('/tmp/.hbnb_auth_token', 'w') as f:
+            f.write(auth)
+
+    else:
+        result[str(status)] = response.json()
+
+    print(status)
+    print(result)
+    return(result)

@@ -28,6 +28,15 @@ def get_tasks(project_number):
 
     number = 0
     for task in tasks:
-        print('{}. - {} id: '.format(number, task['title']), end='')
-        print('{}'.format(task['id']))
+        title = task['title']
+        task_id = task['id']
+        print('{}. - {} id: '.format(number, title), end='')
+        print('{}'.format(task_id))
+        tasks_dict[str(number)] = [title, task_id]
         number += 1
+
+    with open('/.current_project', 'w') as f:
+        json.dump(tasks_dict, f)
+
+
+    return(tasks_dict)

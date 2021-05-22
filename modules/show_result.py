@@ -7,7 +7,7 @@ from os import path
 from time import sleep
 from random import randint as rand
 
-def show_result(correction_id='5029461'):
+def show_result(correction_id='', task={}):
     """ Prints the result of the correction """
 
     size = get_terminal_size()
@@ -25,20 +25,21 @@ def show_result(correction_id='5029461'):
 
     response = get(url)
 
-    i = 1
-    print("Checking your code... {}".format(char))
-    while response.json()['status'] != 'Done':
-        sleep(0.2)
-        print('▋' * i)
-        if response.json()['status'] == 'Done':
-            break
-        print("\033[2;0f")
-        i += 1
-        response = get(url)
-
-
     good_emoji = ['🔥', '⚡', '✨', '🎊', '🎉', '🏆', '🏅', '⭐', '🥂']
     bad_emoji = ['🤢', '🤕', '🤮', '🥵', '🤒', '😵', '🤯', '🥶', '🩹']
+
+    i = 1
+    while response.json()['status'] != 'Done':
+        print("Checking your code... {}".format(good_emoji[rand(0,8)]))
+        sleep(0.2)
+        print('▋▋' * i)
+        if response.json()['status'] == 'Done':
+            print("\033[K")
+            break
+        print("\033[1;0f")
+        i += 1
+        response = get(url)
+    print('')
 
     for check in response.json()['result_display']['checks']:
         check_type = check['check_label']
