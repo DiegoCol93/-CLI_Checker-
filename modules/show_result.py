@@ -7,13 +7,13 @@ from os import path
 from time import sleep
 from random import randint as rand
 
-def show_result(correction_id='', task={}):
+def show_result(correction_id='', task={}, task_num=''):
     """ Prints the result of the correction """
 
     size = get_terminal_size()
     col = size.columns
 
-    if path.exists('/tmp/.hbnb_auth_token') is None:
+    if path.exists('/tmp/.hbnb_auth_token') is False:
         print("No /tmp/.hbnb_auth_token file...")
         return
 
@@ -23,20 +23,28 @@ def show_result(correction_id='', task={}):
     url = 'https://intranet.hbtn.io/correction_requests/{}.json?auth_token={}' \
     .format(correction_id, auth)
 
-    response = get(url)
 
-    good_emoji = ['🔥', '⚡', '✨', '🎊', '🎉', '🏆', '🏅', '⭐', '🥂']
+    good_emoji = ['🔥', '⚡', '✨', '🎊', '🎉', '🏆', '🏅', '🤩', '🥂']
     bad_emoji = ['🤢', '🤕', '🤮', '🥵', '🤒', '😵', '🤯', '🥶', '🩹']
 
+    print('\033[2J', end='')
+    print("\033[0;0f", end='')
+    print('Task {} {}'.format(task_num, task[task_num][0]))
     i = 1
+    response = get(url)
     while response.json()['status'] != 'Done':
+        print('\033[s', end='')  # Store the current position of the cursor.
         print("Checking your code... {}".format(good_emoji[rand(0,8)]))
         sleep(0.2)
         print('▋▋' * i)
         if response.json()['status'] == 'Done':
-            print("\033[K")
+            print('\033[u', end='')  # Move to stored position.
+            print("\033[K")  # Kill the current line.
             break
-        print("\033[1;0f")
+        if response.json()['status'] == 'Fail':
+            print("Something went wrong with your request\nPlease try again.")
+            return
+        print('\033[u', end='')  # Move to stored position.
         i += 1
         response = get(url)
     print('')
