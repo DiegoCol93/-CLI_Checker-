@@ -23,17 +23,14 @@ def get_auth(email=None, api=None, password=None):
 
     status = response.status_code
 
-    result = {}
+    result = response.json()
 
     if status == 200:
-        auth = response.json()['auth_token']
+        auth = result['auth_token']
 
         with open('/tmp/.hbnb_auth_token', 'w') as f:
             f.write(auth)
 
-    else:
-        result[str(status)] = response.json()
-
-    print(status)
-    print(result)
-    return(result)
+    response_dict = {}
+    response_dict[str(status)] = result
+    return(response_dict)
