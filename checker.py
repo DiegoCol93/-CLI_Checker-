@@ -15,6 +15,8 @@ user_info = {}
 
 y='\033[38;5;220m'
 r='\033[m'
+g='\033[92m'
+
 
 class CLI_Checker(Cmd):
     """ Checker Console. """
@@ -67,9 +69,9 @@ if __name__ == '__main__':
     # CLI_Checker().cmdloop('┌' + '─' * (col - 2) + '┐')
 
     CLI_Checker().cmdloop(' ┌───────────────────────────┐\n'
-                          ' │     CLI-Checker v0.01     │\n'
+                          ' │     CLI-Checker ' + g + 'v0.01' + r + '     │\n'
                           ' │            by:            │\n'
-                          ' │' + y + '        Diego Lopez        ' + r + '│\n'
-                          ' │' + y + '       Wiston Venera       ' + r + '│\n'
-                          ' │' + y + '     Leonardo Valencia     ' + r + '│\n'
+                          ' │ 🔥' + y + '     Diego Lopez     ' + r + '🔥 │\n'
+                          ' │ 🔥' + y + '    Wiston Venera    ' + r + '🔥 │\n'
+                          ' │ 🔥' + y + '  Leonardo Valencia  ' + r + '🔥 │\n'
                           ' └───────────────────────────┘')
