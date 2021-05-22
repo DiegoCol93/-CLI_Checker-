@@ -5,7 +5,7 @@ from sys import argv as av
 from requests import get
 from os import path
 from time import sleep
-
+from random import randint as rand
 
 def show_result(correction_id='5029461'):
     """ Prints the result of the correction """
@@ -25,19 +25,34 @@ def show_result(correction_id='5029461'):
 
     response = get(url)
 
+    i = 1
+    print("Checking your code... {}".format(char))
     while response.json()['status'] != 'Done':
-        sleep(0.5)
-        i = 1
-        for i in range(col):
-            sleep(0.2)
-            print('|' * i)
-            # print("Checking your code... {}".format(char))
-            print("\033[1;0f")
-            i += 1
+        sleep(0.2)
+        print('▋' * i)
+        if response.json()['status'] == 'Done':
+            break
+        print("\033[2;0f")
+        i += 1
         response = get(url)
+
+
+    good_emoji = ['🔥', '⚡', '✨', '🎊', '🎉', '🏆', '🏅', '⭐', '🥂']
+    bad_emoji = ['🤢', '🤕', '🤮', '🥵', '🤒', '😵', '🤯', '🥶', '🩹']
 
     for check in response.json()['result_display']['checks']:
         check_type = check['check_label']
         appproved = check['passed']
         title = check['title']
-        print("{}: Approved: {} Type: {}".format(check['title'],check['passed'],check['check_label']))
+        if appproved:
+            print('\033[92m', end = '')
+            print("{} {}: Approved {}".format(good_emoji[rand(0,8)],
+                                              title,
+                                              good_emoji[rand(0,8)]))
+            print('\033[m', end = '')
+        else:
+            print('\033[91m', end = '')
+            print("{} {}: NOT Approved {}".format(bad_emoji[rand(0,8)],
+                                                  title,
+                                                  bad_emoji[rand(0,8)]))
+            print('\033[m', end = '')
