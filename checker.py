@@ -125,9 +125,9 @@ class CLI_Checker(Cmd):
 
         # Get user credentials with input box.- - - - - - - - - - - - - - - - |
         print("\033[5;0f", end='')
-        print('┌' + '─' * (columns - 2) + '┐')
-        print('│' + ' ' * (columns - 2) + '│')
-        print('└' + '─' * (columns - 2) + '┘')
+        print('┌' + '─' * (columns - 2) + '┐')  # These 3 lines print the box
+        print('│' + ' ' * (columns - 2) + '│')  # Needs to be stored in a
+        print('└' + '─' * (columns - 2) + '┘')  # Variable, somehow...
         print("\033[6;3f", end='')
         email = str(input("Please enter your holberton e-mail: "))
 
@@ -156,45 +156,71 @@ class CLI_Checker(Cmd):
 
         auth_status = get_auth(email, api, password)
 
+        if auth_status is None:
+            return
+
         # If got correct authentication. - - - - - - - - - - - - - - - - - - -|
-        if auth_status and 200 in auth_status:
+        if '200' in auth_status:
             success = "🥳  Correct Login 🥳 "
-            success_space = ' ' * ((columns // 2) - 1 - len(success) // 2)
+            success_space = ' ' * ((columns // 2) - 2 - len(success) // 2)
+            print('\033[92m', end='')
             print("\033[5;0f", end='')
             print('┌' + '─' * (columns - 2) + '┐')
             print('│' + success_space + success + success_space + '│', end = '')
             print('└' + '─' * (columns - 2) + '┘')
+            print('\033[m', end='')
             print("\033[6;3f", end='')
-            question = ("Do you want to store these credentials "
+            sleep(3)
+
+            question = ("Would you like to store these credentials "
                         "for future sessions Y/N?: ")
             answer = ""
+            print("\033[5;0f", end='')
+            print('\033[92m', end='')
+            print('┌' + '─' * (columns - 2) + '┐')
+            print('│' + ' ' * (columns - 2) + '│')
+            print('└' + '─' * (columns - 2) + '┘')
+            print('\033[m', end='')
+            print("\033[6;3f", end='')
             answer = str(input(question))
             while answer not in self.yes_no_list:
                 print("\033[5;0f", end='')
+                print('\033[92m', end='')
                 print('┌' + '─' * (columns - 2) + '┐')
                 print('│' + ' ' * (columns - 2) + '│')
                 print('└' + '─' * (columns - 2) + '┘')
+                print('\033[m', end='')
                 print("\033[6;3f", end='')
                 answer = str(input("Please answer Yes or No: "))
 
             if answer.lower() in ['yes', 'y']:
                 with open('./credentials', 'w+') as f:
+                    cred = 'Your Credentials have been stored in ./credentials'
                     json.dump({'email': email, 'api': api,
                                'password': password, 'token': ""}, f)
-                    sleep(1)
-                    print('Your Credentials have been stored in' + g +
-                          ' ./credentials' + r)
+                    print("\033[5;0f", end='')
+                    print('\033[92m', end='')
+                    print('┌' + '─' * (columns - 2) + '┐')
+                    print('│' + ' ' * (columns - 2) + '│')
+                    print('└' + '─' * (columns - 2) + '┘')
+                    print('\033[m', end='')
+                    print("\033[6;{}f".format((columns - len(cred)) // 2),
+                          end='')
+                    cred = 'Your Credentials have been stored in '
+                    print(cred + g + './credentials' + rs)
                     sleep(2)
+                    print('')
+
         elif auth_status:
             for key, value in auth_status.items():
                 error = value['error']
-                print(r)
+                print(r, end='')
                 print("\033[5;0f", end='')
                 print('┌' + '─' * (columns - 2) + '┐')
                 print('│' + ' ' * (columns - 2) + '│')
                 print('└' + '─' * (columns - 2) + '┘')
                 print("\033[6;{}f".format((columns - len(error)) // 2), end='')
-                print(error + rs)
+                print(error + rs, end='')
             self.start_up()
 
         else:
@@ -202,24 +228,51 @@ class CLI_Checker(Cmd):
 
     # Project command - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_project(self, arg):
-        self.tasks_dict = get_tasks(arg)
+        self.task_dict = get_tasks(arg)
+
+        print('\n'
+              '  ┌ You may now run:\n'
+              '  │\n'
+              '  └─┬─ check <task number>\n'
+              '    ├ To check a specific task.\n'
+              '    │\n'
+              '    ├─ check\n'
+              "    ├ To check all tasks of current project.\n"
+              '    └─┐\n'
+              '      ├ To check only task 2 you would run\n'
+              '      │\n'
+              '      └ Example: check 2\n')
 
     # Check command - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_check(self, arg):
         # If tasks dictionary is empty try reading from project file.
-        tasks_dict = self.tasks_dict
-        if bool(tasks_dict) is None:
-            try:
-                with open('./current_project') as f:
-                    self.tasks_dict = json.loads()
-            except Exception as e:
-                print(r + './current_project' + rs +' does not exist.')
-                print('If you continue having this problem,')
-                print('Please run project command / help project.')
-                print('To cache the current project id #')
-        else:
-            self.task_id = request_correction(arg)
-            show_result(self.task_id, self.tasks_dict)
+        if path.exists('./current_project'):
+            with open('./current_project') as f:
+                self.tasks_dict = json.load(f)
+
+        if bool(self.tasks_dict) is False:
+            print('\n'
+                  '  ┌ Please run:\n'
+                  '  │\n'
+                  '  └─┬─ project <num>\n'
+                  '    │\n'
+                  '    │ In order to store the current project into memory.\n'
+                  '    │\n'
+                  "    │ You can get the number from the intranet's "
+                  'project url:\n'
+                  '    └─┐\n'
+                  '      ├ https://intranet.hbtn.io/projects/212\n'
+                  '      │\n'
+                  '      └ Example: project 212\n')
+            return
+
+        if arg not in self.tasks_dict:
+            print('There is no task # {}'.format(arg))
+            return
+
+
+        correction_id = request_correction(self.tasks_dict[arg][1])
+        show_result(correction_id, self.tasks_dict, arg)
 
     def do_EOF(self, arg):
         """ Exits console when receiving an EOF. """
@@ -234,10 +287,16 @@ class CLI_Checker(Cmd):
         return True
 
 if __name__ == '__main__':
-    CLI_Checker().cmdloop(' ┌───────────────────────────┐\n'
-                          ' │     CLI-Checker ' + g + 'v0.01' + rs + '     │\n'
-                          ' │            by:            │\n'
-                          ' │ 🔥' + y + '     Diego Lopez     ' + rs + '🔥 │\n'
-                          ' │ 🔥' + y + '    Wiston Venera    ' + rs + '🔥 │\n'
-                          ' │ 🔥' + y + '  Leonardo Valencia  ' + rs + '🔥 │\n'
-                          ' └───────────────────────────┘')
+    from os import get_terminal_size
+
+    space_around = ' ' * ((columns - len('┌───────────────────────────┐')) // 2)
+    s = space_around
+
+    CLI_Checker().cmdloop(
+        s + '┌───────────────────────────┐\n' +
+        s + '│     CLI-Checker ' + g + 'v0.01' + rs + '     │\n' +
+        s + '│            by:            │\n' +
+        s + '│ 🔥' + y + '     Diego Lopez     ' + rs + '🔥 │\n' +
+        s + '│ 🔥' + y + '    Wiston Venera    ' + rs + '🔥 │\n' +
+        s + '│ 🔥' + y + '  Leonardo Valencia  ' + rs + '🔥 │\n' +
+        s + '└───────────────────────────┘')
