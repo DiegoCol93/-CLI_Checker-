@@ -30,8 +30,6 @@ class CLI_Checker(Cmd):
 
     def preloop(self):
         """ Method that runs before the main loop of the console. """
-        print('\u001b[0J', end='')
-
         if path.exists('./credentials'):
             with open('./credentials', 'r') as f:
                 creds = json.load(f)
@@ -40,6 +38,7 @@ class CLI_Checker(Cmd):
                 password = creds['password']
                 get_auth(email, api, password)
         else:
+            print('\033[2J', end='')
             self.do_start()
 
     def do_EOF(self, arg):
@@ -62,9 +61,13 @@ class CLI_Checker(Cmd):
         welcome_l2 = "CLI-Checker v0.01"
         welcome_l3 = "We hope you enjoy"
         welcome_l4 = "Please"
-        welcome_l5 = "report any issues."
-        welcome_l6 = "At"
+        welcome_l5 = "Report any issues"
+        welcome_l6 = "At:"
         welcome_l7 = "https://github.com/DiegoCol93/CLI_Checker"
+        welcome_l8 = "or Follow us and write to us:"
+        welcome_l9 = "https://twitter.com/LopezDfelo93"
+        welcome_l10 = "https://twitter.com/wisvem"
+        welcome_l11 = "https://twitter.com/leovalsan_dev"
 
         # Calculate the space around each line's welcome message.
         welcome_s0 = ' ' * ((columns // 2) - 1 - len(welcome_l0) // 2)
@@ -75,24 +78,51 @@ class CLI_Checker(Cmd):
         welcome_s5 = ' ' * ((columns // 2) - 1 - len(welcome_l5) // 2)
         welcome_s6 = ' ' * ((columns // 2) - 1 - len(welcome_l6) // 2)
         welcome_s7 = ' ' * ((columns // 2) - 1 - len(welcome_l7) // 2)
+        welcome_s8 = ' ' * ((columns // 2) - 1 - len(welcome_l8) // 2)
+        welcome_s9 = ' ' * ((columns // 2) - 1 - len(welcome_l9) // 2)
+        welcome_s10 = ' ' * ((columns // 2) - 1 - len(welcome_l10) // 2)
+        welcome_s11 = ' ' * ((columns // 2) - 1 - len(welcome_l11) // 2)
 
         welcome_l2 = "CLI-Checker" + g + " v0.01" + r
 
+        print("\033[2;0f", end='')
         print(welcome_s0 + welcome_l0 + welcome_s0)
         sleep(2)
+
         print(welcome_s1 + welcome_l1 + welcome_s1)
         sleep(1.5)
+
         print(welcome_s2 + welcome_l2 + welcome_s2)
         sleep(1.5)
+
+        print("\033[2;0f", end='')
         print(welcome_s3 + welcome_l3 + welcome_s3)
         sleep(1.5)
+
         print(welcome_s4 + welcome_l4 + welcome_s4)
         sleep(1.5)
+
         print(welcome_s5 + welcome_l5 + welcome_s5)
         sleep(1.5)
+
+        print("\033[2;0f", end='')
         print(welcome_s6 + welcome_l6 + welcome_s6)
         sleep(1.5)
+
         print(welcome_s7 + welcome_l7 + welcome_s7)
+        sleep(1.5)
+
+        print(welcome_s8 + welcome_l8 + welcome_s8)
+        sleep(1.5)
+
+        print("\033[2;0f", end='')
+        print(welcome_s9 + welcome_l9 + welcome_s9)
+        sleep(1.5)
+
+        print(welcome_s10 + welcome_l10 + welcome_s10)
+        sleep(1.5)
+
+        print(welcome_s11 + welcome_l11 + welcome_s11)
         sleep(1.5)
 
 
@@ -100,11 +130,11 @@ class CLI_Checker(Cmd):
         print('│' + ' ' * (columns - 2) + '│')
         print('└' + '─' * (columns - 2) + '┘')
         i = 0
-        print("\033[10;3f")
+        print("\033[5;3f", end='')
         while i < columns - 3:
             sleep(0.02)
-            print('▋' * i)
-            print("\033[10;3f")
+            print('│ ' + '▋' * i)
+            print("\033[5;3f")
             i += 1
         print('\n')
 
