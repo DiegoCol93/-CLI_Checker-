@@ -31,8 +31,7 @@ def get_tasks(project_number):
     for task in tasks:
         title = task['title']
         task_id = task['id']
-        print('{}. - {} id: '.format(number, title), end='')
-        print('{}'.format(task_id))
+        print('\033[92m{}\033[m - {}'.format(number, title))
         tasks_dict[str(number)] = [title, task_id]
         number += 1
 
