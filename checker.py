@@ -233,15 +233,15 @@ class CLI_Checker(Cmd):
         print('\n'
               '  ┌ You may now run:\n'
               '  │\n'
-              '  └─┬─ check <task number>\n'
+              '  └─┬─ check <\033[92mtask number\033[m>\n'
               '    ├ To check a specific task.\n'
               '    │\n'
-              '    ├─ check\n'
-              "    ├ To check all tasks of current project.\n"
+              '    ├─ \033[91mcheck --- Not implemented yet 🤕\033[m\n'
+              "    ├ \033[91mTo check all tasks of current project.\033[m\n"
               '    └─┐\n'
               '      ├ To check only task 2 you would run\n'
               '      │\n'
-              '      └ Example: check 2\n')
+              '      └ Example: check \033[92m2\033[m\n')
 
     # Check command - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_check(self, arg):
