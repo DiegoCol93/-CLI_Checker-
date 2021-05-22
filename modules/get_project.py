@@ -3,7 +3,7 @@
 from sys import argv as av
 from requests import get
 from os import environ, path
-
+from json import dump
 
 def get_tasks(project_number):
     """ Prints all of the ids of the tasks in the given project. """
@@ -27,6 +27,7 @@ def get_tasks(project_number):
         return
 
     number = 0
+    tasks_dict = {}
     for task in tasks:
         title = task['title']
         task_id = task['id']
@@ -35,8 +36,7 @@ def get_tasks(project_number):
         tasks_dict[str(number)] = [title, task_id]
         number += 1
 
-    with open('/.current_project', 'w') as f:
-        json.dump(tasks_dict, f)
-
+    with open('./current_project', 'w') as f:
+        dump(tasks_dict, f)
 
     return(tasks_dict)
