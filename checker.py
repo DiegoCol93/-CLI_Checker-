@@ -27,7 +27,6 @@ class CLI_Checker(Cmd):
 
     # Class variables.
     yes_no_list = ['y', 'n', 'no', 'yes']
-    tasks_dict = {}
 
     # Custom prompt definition.
     prompt = y + 'CLI-Checker ⚡ ' + rs
@@ -35,8 +34,8 @@ class CLI_Checker(Cmd):
     # Overrides the preloop class method. - - - - - - - - - - - - - - - - - - |
     def preloop(self):
         """ Method that runs before the main loop of the console. """
-        if path.exists('./credentials'):
-            with open('./credentials', 'r') as f:
+        if path.exists('/tmp/.hbnb_creds'):
+            with open('/tmp/.hbnb_creds', 'r') as f:
                 creds = json.load(f)
                 email = creds['email']
                 api = creds['api']
@@ -194,8 +193,9 @@ class CLI_Checker(Cmd):
                 answer = str(input("Please answer Yes or No: "))
 
             if answer.lower() in ['yes', 'y']:
-                with open('./credentials', 'w+') as f:
-                    cred = 'Your Credentials have been stored in ./credentials'
+                with open('/tmp/.hbnb_creds', 'w+') as f:
+                    cred = 'Your Credentials have been stored in ' \
+                           '/tmp/.hbnb_creds'
                     json.dump({'email': email, 'api': api,
                                'password': password, 'token': ""}, f)
                     print("\033[5;0f", end='')
@@ -207,7 +207,7 @@ class CLI_Checker(Cmd):
                     print("\033[6;{}f".format((columns - len(cred)) // 2),
                           end='')
                     cred = 'Your Credentials have been stored in '
-                    print(cred + g + './credentials' + rs)
+                    print(cred + g + '/tmp/.hbnb_creds' + rs)
                     sleep(2)
                     print('')
 
@@ -229,50 +229,52 @@ class CLI_Checker(Cmd):
     # Project command - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_project(self, arg):
         self.task_dict = get_tasks(arg)
-
+        if self.task_dict is None:
+            return
         print('\n'
-              '  ┌ You may now run:\n'
+              '  ┌\033[92m─\033[m You may now run:\n'
               '  │\n'
-              '  └─┬─ check <\033[92mtask number\033[m>\n'
+              '  └─┬\033[92m─\033[m check <\033[92mtask number\033[m>\n'
               '    ├ To check a specific task.\n'
               '    │\n'
-              '    ├─ \033[91mcheck --- Not implemented yet 🤕\033[m\n'
+              '    ├\033[91m─\033[m check\033[91m Not implemented yet'
+              '🤕, Sorry.\033[m\n'
               "    ├ \033[91mTo check all tasks of current project.\033[m\n"
               '    └─┐\n'
-              '      ├ To check only task 2 you would run\n'
+              '      ├\033[92m─\033[m To check only task 2 you would run\n'
               '      │\n'
-              '      └ Example: check \033[92m2\033[m\n')
+              '      └\033[92m─\033[m Example: check \033[92m2\033[m\n')
 
     # Check command - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_check(self, arg):
         # If tasks dictionary is empty try reading from project file.
-        if path.exists('./current_project'):
-            with open('./current_project') as f:
-                self.tasks_dict = json.load(f)
+        if path.exists('/tmp/.hbnb_current_project'):
+            with open('/tmp/.hbnb_current_project') as f:
+                self.task_dict = json.load(f)
 
-        if bool(self.tasks_dict) is False:
+        if bool(self.task_dict) is False:
             print('\n'
-                  '  ┌ Please run:\n'
+                  '  ┌\033[92m─\033[m Please run the command below:\n'
                   '  │\n'
-                  '  └─┬─ project <num>\n'
+                  '  └─┬\033[92m─\033[m project <\033[92mnum\033[m>\n'
                   '    │\n'
-                  '    │ In order to store the current project into memory.\n'
+                  '    │  So that you can store the project into memory.\n'
                   '    │\n'
-                  "    │ You can get the number from the intranet's "
+                  "    │  You can get the number from the intranet's "
                   'project url:\n'
                   '    └─┐\n'
-                  '      ├ https://intranet.hbtn.io/projects/212\n'
+                  '      ├\033[92m─\033[m https://intranet.hbtn.io/projects/'
+                  '\033[92m212\033[m\n'
                   '      │\n'
-                  '      └ Example: project 212\n')
+                  '      └\033[92m─\033[m Example: project \033[92m212\033[m\n')
             return
 
-        if arg not in self.tasks_dict:
+        if arg not in self.task_dict:
             print('There is no task # {}'.format(arg))
             return
 
-
-        correction_id = request_correction(self.tasks_dict[arg][1])
-        show_result(correction_id, self.tasks_dict, arg)
+        correction_id = request_correction(self.task_dict[arg][1])
+        show_result(correction_id, self.task_dict, arg)
 
     def do_EOF(self, arg):
         """ Exits console when receiving an EOF. """
