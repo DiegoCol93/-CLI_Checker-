@@ -46,7 +46,7 @@ while [ $installed != 1 ]; do
         echo -en '\033[s' # Store cursor's position progrss in loading bar.
         echo ""
         echo ""
-        echo -en "\t🔥 Created installation dir /opt/checker "
+        echo -en "\t🔥 Created installation dir \033[92m/opt/checker\033[m "
     else
         echo -ne '\033[91m'
         printf '▋%.0s' $(seq 0 $size)
@@ -69,7 +69,7 @@ while [ $installed != 1 ]; do
         echo ""
         echo ""
         echo ""
-        echo -en "\t🔥 Cloned repoository in /opt/checker"
+        echo -en "\t🔥 Cloned repoository into \033[92m/opt/checker\033[m"
     else
         echo -ne '\033[91m'
         printf '▋%.0s' $(seq 0 $size)
@@ -90,18 +90,18 @@ while [ $installed != 1 ]; do
     #
     if sudo ln -s /opt/checker/CLI_Checker/checker /usr/local/bin/checker 2> /dev/null ; then
         echo -ne '\033[92m'
-        printf '▋%.0s' $(seq 0 $(($size - 1)))
+        printf '▋%.0s' $(seq 0 $(($size - 3)))
         echo -ne '\033[m'
         echo ""
         echo ""
         echo ""
         echo ""
-        echo -en "\t🔥 Created symlink:\n" \
-             "\t\tfrom : /usr/local/bin/checker \033[92m────────────┐\033[m\n" \
-             "\t\tto   : /opt/checker/CLI_Checker/checker \033[92m──┘\033[m\n"
+        echo -en "\t🔥 Created symlink file:\n" \
+             "\t\tfrom : \033[92m/usr/local/bin/checker ────────────┐\033[m\n" \
+             "\t\tto   : \033[92m/opt/checker/CLI_Checker/checker ──┘\033[m\n"
     else
         echo -ne '\033[91m'
-        printf '▋%.0s' $(seq 0 $(($size - 1)))
+        printf '▋%.0s' $(seq 0 $(($size - 3)))
         echo -ne '\033[m'
         echo -en '\033[s'
         echo ""
@@ -117,13 +117,14 @@ while [ $installed != 1 ]; do
 
     (( installed++ ))
     echo ""
-    echo -e "CLI_Checker v0.01 has been installed \033[92msuccesfully\033[m."
+    echo -e "CLI_Checker \033[92mv0.01\033[m has been installed \033[92msuccesfully\033[m."
     echo -e "You may now run:\n"
     echo -e "\t\033[92mchecker\033[m\n"
-    echo -e "to start the checker console."
-    
+    echo -e "In order to start the checker console."
+
 done
 
+# Error if Not installed or already installed.
 if [ $installed != 1 ]; then
     echo -e "  This could be caused by many reasons...\n"
     echo "  The main one is that the checker is already installed."
