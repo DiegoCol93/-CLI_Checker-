@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """ Module for printing the id of all tasks of current project. """
+from random import randint as rand
+from os import environ, path
 from sys import argv as av
 from requests import get
-from os import environ, path
 from json import dump
 
 def get_tasks(project_number):
@@ -20,10 +21,20 @@ def get_tasks(project_number):
 
     response = get(url)
 
-    try:
-        tasks = response.json()['tasks']
-    except Exception as e:
-        print(e)
+    bad_emoji = ['🤢', '🤕', '🤮', '🥵', '🤒', '😵', '🤯', '🥶', '🩹']
+
+    if response.status_code == 200:
+        try:
+            tasks = response.json()['tasks']
+        except:
+            print('{} This project is not available for you yet sorry. {}'
+                  .format(bad_emoji[rand(0,8)], bad_emoji[rand(0,8)]))
+            return
+    else:
+        # Error no project found.
+        print('{} The project # \033[91m{}\033[m was \033[91m{}\033[m {}'
+              .format(bad_emoji[rand(0,8)], project_number,
+                      response.json()['error'], bad_emoji[rand(0,8)]))
         return
 
     number = 0
@@ -35,7 +46,7 @@ def get_tasks(project_number):
         tasks_dict[str(number)] = [title, task_id]
         number += 1
 
-    with open('./current_project', 'w') as f:
+    with open('/tmp/.hbnb_current_project', 'w') as f:
         dump(tasks_dict, f)
 
     return(tasks_dict)
