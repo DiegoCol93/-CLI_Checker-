@@ -42,8 +42,11 @@ class CLI_Checker(Cmd):
                 password = creds['password']
                 get_auth(email, api, password)
         else:
-            print('\033[2J', end='')
-            self.start_up()
+            if path.exists('/tmp/.hbnb_auth_token'):
+                return
+            else:
+                print('\033[2J', end='')
+                self.start_up()
 
     # 1st time startup method.- - - - - - - - - - - - - - - - - - - - - - - -|
     def start_up(self):
@@ -160,8 +163,8 @@ class CLI_Checker(Cmd):
 
         # If got correct authentication. - - - - - - - - - - - - - - - - - - -|
         if '200' in auth_status:
-            success = "🥳  Correct Login 🥳 "
-            success_space = ' ' * ((columns // 2) - 2 - len(success) // 2)
+            success = "🥳 Correct Login 🥳"
+            success_space = ' ' * ((columns - len(success)) // 2)
             print('\033[92m', end='')
             print("\033[5;0f", end='')
             print('┌' + '─' * (columns - 2) + '┐')
