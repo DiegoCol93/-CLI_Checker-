@@ -27,6 +27,7 @@ class CLI_Checker(Cmd):
 
     # Class variables.
     yes_no_list = ['y', 'n', 'no', 'yes']
+    task_dict = {}
 
     # Custom prompt definition.
     prompt = y + 'CLI-Checker ⚡ ' + rs
@@ -231,6 +232,8 @@ class CLI_Checker(Cmd):
 
     # Project command - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_project(self, arg):
+        """  """
+
         self.task_dict = get_tasks(arg)
         if self.task_dict is None:
             return
