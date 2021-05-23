@@ -32,6 +32,10 @@ class CLI_Checker(Cmd):
     # Custom prompt definition.
     prompt = y + 'CLI-Checker ⚡ ' + rs
 
+    # Help custom instance variables.
+    doc_header = "🤔 Currently availbale commands are: 🤔"
+    ruler = y + "─" + rs
+
     # Overrides the preloop class method. - - - - - - - - - - - - - - - - - - |
     def preloop(self):
         """ Method that runs before the main loop of the console. """
@@ -213,7 +217,7 @@ class CLI_Checker(Cmd):
                     cred = 'Your Credentials have been stored in '
                     print(cred + g + '/tmp/.hbnb_creds' + rs)
                     sleep(2)
-                    print('')
+                print('')
 
         elif auth_status:
             for key, value in auth_status.items():
@@ -232,11 +236,30 @@ class CLI_Checker(Cmd):
 
     # Project command - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_project(self, arg):
-        """  """
+        """\n""" \
+        """  ┌\033[92m─\033[m Fetches and updates the current project.\n""" \
+        """  │\n""" \
+        """  └─┬\033[92m─\033[m Usage:\n""" \
+        """    │\n""" \
+        """    ├──\033[92m─\033[m project <\033[92mnum\033[m>\n""" \
+        """    │\n""" \
+        """    ├\033[92m─\033[m The \033[92mnum\033[m variable represents """ \
+        """the number from\n""" \
+        """    │  the project's url in your current Holberton proje""" \
+        """ct.\n""" \
+        """    │\n""" \
+        """    └─┬\033[92m─\033[m Example:\n""" \
+        """      │\n""" \
+        """      ├\033[92m─\033[m From: https://intranet.hbtn.io/projects""" \
+        """/\033[92m212\033[m\n""" \
+        """      │\n""" \
+        """      └\033[92m─\033[m Run: project \033[92m212\033[m\n""" \
 
         self.task_dict = get_tasks(arg)
+
         if self.task_dict is None:
             return
+
         print('\n'
               '  ┌\033[92m─\033[m You may now run:\n'
               '  │\n'
