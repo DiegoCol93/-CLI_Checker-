@@ -108,9 +108,12 @@ while [ $installed != 1 ]; do
         echo ""
         echo ""
         echo ""
-        echo -e "\t🥶 Couldn't create Symbolic \033[91m/usr/local/bin/checker\033[m.\n"
+        echo -e "\t🥶 Couldn't create Symbolic \033[91m/usr/local/bin/checker\033[m file.\n"
         break
     fi    
+
+    echo -ne "\033[]"
+
 
     (( installed++ ))
     echo ""
@@ -122,9 +125,10 @@ while [ $installed != 1 ]; do
 done
 
 if [ $installed != 1 ]; then
-    echo "This could be caused because you already have the checker installed."
-    echo "If this prevents you from launching the console."
-    echo -e "Please run these commands to erase the files and try installing again.\n"
+    echo -e "  This could be caused by many reasons...\n"
+    echo "  The main one is that the checker is already installed."
+    echo "  If you are unable to launch the console."
+    echo -e "  Please run these commands to erase the installation files and try installing again.\n"
     echo -e "\tsudo rm /opt/checker/ -rf"
-    echo -e "\tsudo rm /usr/local/bin/checker"
+    echo -e "\tsudo rm /usr/local/bin/checker\n"
 fi
