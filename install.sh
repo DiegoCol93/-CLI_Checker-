@@ -123,7 +123,7 @@ done
 
 if [ $installed != 1 ]; then
     echo "This could be caused because you already have the checker installed."
-    echo " If this prevents you from launching the console."
+    echo "If this prevents you from launching the console."
     echo -e "Please run these commands to erase the files and try installing again.\n"
     echo -e "\tsudo rm /opt/checker/ -rf"
     echo -e "\tsudo rm /usr/local/bin/checker"
