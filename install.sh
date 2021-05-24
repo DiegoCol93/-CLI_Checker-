@@ -98,7 +98,7 @@ while [ $installed != 1 ]; do
     #
     if sudo ln -s /opt/checker/CLI_Checker/checker /usr/local/bin/checker 2> /dev/null ; then
         echo -ne '\033[92m'
-        printf '▋%.0s' $(seq 0 $(($size - 2))
+        printf '▋%.0s' $(seq 0 $(($size - 2)))
         echo -ne '\033[m'
         echo ""
         echo ""
@@ -109,7 +109,7 @@ while [ $installed != 1 ]; do
              "\t\tto   : \033[92m/opt/checker/CLI_Checker/checker ──┘\033[m\n"
     else
         echo -ne '\033[91m'
-        printf '▋%.0s' $(seq 0 $(($size - 2))
+        printf '▋%.0s' $(seq 0 $(($size - 2)))
         echo -ne '\033[m'
         echo -en '\033[s'
         echo ""
