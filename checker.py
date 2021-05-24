@@ -5,7 +5,7 @@ from modules.show_result import show_result
 from modules.get_project import get_tasks
 from modules.get_auth import get_auth
 
-from os import path, get_terminal_size
+from os import path, get_terminal_size, getenv
 from getpass import getpass
 from time import sleep
 from cmd import Cmd
