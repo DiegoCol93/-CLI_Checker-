@@ -1,30 +1,23 @@
 #!/usr/bin/env bash
 
-# Print box for loading bar.
-# Get the width of the terminal.
-cols=$(tput cols)
-cols=$(($cols - 3))
+cols=$(tput cols) # ───────────── Get the width of the terminal.
+cols=$(($cols - 3)) # ─────────── Substract 3 to prevent overflow.
 
-# Print upper part uf load bar box.
-echo -n '┌'
-printf '─%.0s' $(seq 0 $cols)
-echo  '┐'
+echo -n '┌' # ──────────────────┐ Print upper part of load bar box.
+printf '─%.0s' $(seq 0 $cols) # ┤ String multiplication in bash.
+echo '┐' # ─────────────────────┘
 
-# Print middle part uf load bar box.
-echo -n '│'
-printf ' %.0s' $(seq 0 $cols)
-echo  '│'
+echo -n '│' # ──────────────────┐ 
+printf ' %.0s' $(seq 0 $cols) # │ Print middle part uf load bar box.
+echo '│' # ─────────────────────┘
 
-# Print bottom part uf load bar box.
-echo -n '└'
-printf '─%.0s' $(seq 0 $cols)
-echo  '┘'
+echo -n '└' # ──────────────────┐ 
+printf '─%.0s' $(seq 0 $cols) # │ Print bottom part uf load bar box.
+echo -ne '┘\r' # ───────────────┘
 
-# Move cursor one line up.
-echo -ne '\033[2A'
+echo -ne '\033[1A\033[2C' # ───── Set cursor to begining of loading bar.
 
-# Draw again the leftside border.
-echo -n '│ '
+cols=$(($cols - 1)) # ─────────── Substract one to account for padding.
 
 # Start main installation loop to draw progress bar.
 echo -en '\033[s' # Save cursor's position to start of load bar.
@@ -39,7 +32,7 @@ while [ $installed != 1 ]; do
     # 1 . Create install directory for files.
     if sudo mkdir /opt/checker 2> /dev/null ; then
         echo -ne '\033[92m'
-        printf '▋%.0s' $(seq 0 $size)
+        printf '█%.0s' $(seq 0 $size)
         echo -ne '\033[m'
         echo -en '\033[s' # Store cursor's position progrss in loading bar.
         echo ""
@@ -47,7 +40,7 @@ while [ $installed != 1 ]; do
         echo -en "\t🔥 Created installation dir \033[92m/opt/checker\033[m "
     else
         echo -ne '\033[91m'
-        printf '▋%.0s' $(seq 0 $size)
+        printf '█%.0s' $(seq 0 $size)
         echo -ne '\033[m'
         echo -en '\033[s'
         echo ""
@@ -65,7 +58,7 @@ while [ $installed != 1 ]; do
     # 2. Clone repository into installation directory.
     if sudo git -C /opt/checker clone https://github.com/DiegoCol93/CLI_Checker.git 2> /dev/null; then
         echo -ne '\033[92m'
-        printf '▋%.0s' $(seq 0 $size)
+        printf '█%.0s' $(seq 0 $size)
         echo -ne '\033[m'
         echo -en '\033[s'
         echo ""
@@ -74,7 +67,7 @@ while [ $installed != 1 ]; do
         echo -en "\t🔥 Cloned repoository into \033[92m/opt/checker\033[m"
     else
         echo -ne '\033[91m'
-        printf '▋%.0s' $(seq 0 $size)
+        printf '█%.0s' $(seq 0 $size)
         echo -ne '\033[m'
         echo -en '\033[s'
         echo ""
@@ -98,7 +91,7 @@ while [ $installed != 1 ]; do
     #
     if sudo ln -s /opt/checker/CLI_Checker/checker /usr/local/bin/checker 2> /dev/null ; then
         echo -ne '\033[92m'
-        printf '▋%.0s' $(seq 0 $(($size - 2)))
+        printf '█%.0s' $(seq 0 $(($size - 2)))
         echo -ne '\033[m'
         echo ""
         echo ""
@@ -109,7 +102,7 @@ while [ $installed != 1 ]; do
              "\t\tto   : \033[92m/opt/checker/CLI_Checker/checker ──┘\033[m\n"
     else
         echo -ne '\033[91m'
-        printf '▋%.0s' $(seq 0 $(($size - 2)))
+        printf '█%.0s' $(seq 0 $(($size - 2)))
         echo -ne '\033[m'
         echo -en '\033[s'
         echo ""
