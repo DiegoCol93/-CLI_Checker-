@@ -294,10 +294,10 @@ class CLI_Checker(Cmd):
             with open('/tmp/.hbnb_current_project') as f:
                 self.task_dict = json.load(f)
 
-                if bool(self.task_dict) is False:
-                    print('\n'
-                          '  ┌\033[92m─\033[m Please run the command below:\n'
-                          '  │\n'
+        if bool(self.task_dict) is False:
+            print('\n'
+                  '  ┌\033[92m─\033[m Please run the command below:\n'
+                  '  │\n'
                   '  └─┬\033[92m─\033[m project <\033[92mnum\033[m>\n'
                   '    │\n'
                   '    │  So that you can store the project into memory.\n'
