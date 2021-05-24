@@ -27,6 +27,7 @@ echo -ne '\033[2A'
 echo -n '│ '
 
 # Start main installation loop to draw progress bar.
+echo -en '\033[s' # Save cursor's position to start of load bar.
 installed=0
 
 i=0
@@ -44,7 +45,6 @@ while [ $installed != 1 ]; do
         echo ""
         echo ""
         echo -en "\t🔥 Created installation dir \033[92m/opt/checker\033[m "
-        echo -en '\033[u'
     else
         echo -ne '\033[91m'
         printf '▋%.0s' $(seq 0 $size)
@@ -53,8 +53,14 @@ while [ $installed != 1 ]; do
         echo ""
         echo ""
         echo -en "\t🤢 Dir \033[91m/opt/checker\033[m already exists."
-        echo -en '\033[u'
     fi    
+
+    # echo -en '\033[u' # Reset cursor to saved position above.
+    # Due to zsh not working with the command above... this below...
+    echo -en '\r'
+    echo -en '\033[2A'
+    echo -en '\033[3C'
+    echo -en "\033[${size}C"
 
     # 2. Clone repository into installation directory.
     if sudo git -C /opt/checker clone https://github.com/DiegoCol93/CLI_Checker.git 2> /dev/null; then
@@ -66,7 +72,6 @@ while [ $installed != 1 ]; do
         echo ""
         echo ""
         echo -en "\t🔥 Cloned repoository into \033[92m/opt/checker\033[m"
-        echo -en '\033[u'
     else
         echo -ne '\033[91m'
         printf '▋%.0s' $(seq 0 $size)
@@ -76,9 +81,15 @@ while [ $installed != 1 ]; do
         echo ""
         echo ""
         echo -en "\t🤮 Couldn't clone repository in \033[91m/opt/checker.\033[m"
-        echo -en '\033[u'
     fi    
 
+    # echo -en '\033[u' # Reset cursor to saved position above.
+    # Due to zsh not working with the command above... this below...
+    echo -en '\r'
+    echo -en '\033[3A'
+    echo -en '\033[3C'
+    echo -en "\033[${size}C"
+    echo -en "\033[${size}C"
 
     # 3. Create symbolic link to script for running checker command.
     #
@@ -87,7 +98,7 @@ while [ $installed != 1 ]; do
     #
     if sudo ln -s /opt/checker/CLI_Checker/checker /usr/local/bin/checker 2> /dev/null ; then
         echo -ne '\033[92m'
-        printf '▋%.0s' $(seq 0 $(($size - 3)))
+        printf '▋%.0s' $(seq 0 $size)
         echo -ne '\033[m'
         echo ""
         echo ""
@@ -96,10 +107,9 @@ while [ $installed != 1 ]; do
         echo -en "\t🔥 Created symlink file:\n" \
              "\t\tfrom : \033[92m/usr/local/bin/checker ────────────┐\033[m\n" \
              "\t\tto   : \033[92m/opt/checker/CLI_Checker/checker ──┘\033[m\n"
-        echo -en '\033[u'
     else
         echo -ne '\033[91m'
-        printf '▋%.0s' $(seq 0 $(($size - 3)))
+        printf '▋%.0s' $(seq 0 $size)
         echo -ne '\033[m'
         echo -en '\033[s'
         echo ""
@@ -107,7 +117,6 @@ while [ $installed != 1 ]; do
         echo ""
         echo ""
         echo -e "\t🥶 Couldn't create Symbolic \033[91m/usr/local/bin/checker\033[m file.\n"
-        echo -en '\033[u'
         break
     fi    
 
