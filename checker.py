@@ -169,11 +169,11 @@ class CLI_Checker(Cmd):
         # If got correct authentication. - - - - - - - - - - - - - - - - - - -|
         if '200' in auth_status:
             success = "🥳 Correct Login 🥳"
-            success_space = ' ' * ((columns - len(success)) // 2)
+            success_space = ' ' * ((columns - len(success) + 1) // 2)
             print('\033[92m', end='')
             print("\033[5;0f", end='')
             print('┌' + '─' * (columns - 2) + '┐')
-            print('│' + success_space + success + success_space + '│', end = '')
+            print('│' + success_space + success + success_space, end = '│')
             print('└' + '─' * (columns - 2) + '┘')
             print('\033[m', end='')
             print("\033[6;3f", end='')
@@ -276,15 +276,28 @@ class CLI_Checker(Cmd):
 
     # Check command - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_check(self, arg):
+        ('''\n'''
+         '''  ┌\033[92m─\033[m You may now run:\n'''
+         '''  │\n'''
+         '''  └─┬\033[92m─\033[m check <\033[92mtask number\033[m>\n'''
+         '''    ├ To check a specific task.\n'''
+         '''    │\n'''
+         '''    ├\033[91m─\033[m check\033[91m Not implemented yet'''
+         '''🤕, Sorry.\033[m\n'''
+         '''    ├ \033[91mTo check all tasks of current project.\033[m\n'''
+         '''    └─┐\n'''
+         '''      ├\033[92m─\033[m To check only task 2 you would run\n'''
+         '''      │\n'''
+         '''      └\033[92m─\033[m Example: check \033[92m2\033[m\n''')
         # If tasks dictionary is empty try reading from project file.
         if path.exists('/tmp/.hbnb_current_project'):
             with open('/tmp/.hbnb_current_project') as f:
                 self.task_dict = json.load(f)
 
-        if bool(self.task_dict) is False:
-            print('\n'
-                  '  ┌\033[92m─\033[m Please run the command below:\n'
-                  '  │\n'
+                if bool(self.task_dict) is False:
+                    print('\n'
+                          '  ┌\033[92m─\033[m Please run the command below:\n'
+                          '  │\n'
                   '  └─┬\033[92m─\033[m project <\033[92mnum\033[m>\n'
                   '    │\n'
                   '    │  So that you can store the project into memory.\n'
@@ -330,4 +343,5 @@ if __name__ == '__main__':
         s + '│ 🔥' + y + '     Diego Lopez     ' + rs + '🔥 │\n' +
         s + '│ 🔥' + y + '    Wiston Venera    ' + rs + '🔥 │\n' +
         s + '│ 🔥' + y + '  Leonardo Valencia  ' + rs + '🔥 │\n' +
-        s + '└───────────────────────────┘')
+        s + '└───────────────────────────┘\n'
+        'Please run help to see available commands..')
