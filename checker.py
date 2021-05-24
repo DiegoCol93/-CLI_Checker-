@@ -169,7 +169,7 @@ class CLI_Checker(Cmd):
         # If got correct authentication. - - - - - - - - - - - - - - - - - - -|
         if '200' in auth_status:
             success = "🥳 Correct Login 🥳"
-            success_space = ' ' * ((columns - len(success) + 4) // 2)
+            success_space = ' ' * ((columns - len(success) - 2) // 2)
             print('\033[92m', end='')
             print("\033[5;0f", end='')
             print('┌' + '─' * (columns - 2) + '┐')
