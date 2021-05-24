@@ -149,7 +149,14 @@ class CLI_Checker(Cmd):
         print('┌' + '─' * (columns - 2) + '┐')
         print('│' + ' ' * (columns - 2) + '│')
         print('└' + '─' * (columns - 2) + '┘')
-        password = getpass("\033[6;3fPlease enter your password: ")
+        print("\033[6;3f", end='')
+        if getenv('PSS'):
+            print('PSS environ variable was found...')
+            password = getenv('PSS')
+        else:
+            password = getpass("\033[6;3fPlease enter your password: ")
+
+
 
         # Load custom mock loading Bar... - - - - - - - - - - - - - - - - - - |
         i = 0
