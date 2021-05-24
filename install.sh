@@ -64,7 +64,7 @@ while [ $installed != 1 ]; do
         echo ""
         echo ""
         echo ""
-        echo -en "\t🔥 Cloned repoository into \033[92m/opt/checker\033[m"
+        echo -en "\t🔥 Cloned repository into \033[92m/opt/checker\033[m"
     else
         echo -ne '\033[91m'
         printf '█%.0s' $(seq 0 $size)
