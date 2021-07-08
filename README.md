@@ -1,6 +1,9 @@
 # ⚡ CLI_Checker ⚡
  > A Holberton School checker tool to avoid using your browser to check manaully every task of your current project.
 
+## Prerquisites
+You need the [tools][api_link] section available in the intranet
+ 
 ## How to install
 
 clone the repo and run the instalation script
