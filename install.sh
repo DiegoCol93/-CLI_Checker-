@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 REPO="https://github.com/Athesto/CLI_Checker.git"
+BRANCH="main"
 
 cols=$(tput cols) # ───────────── Get the width of the terminal.
 cols=$(($cols - 3)) # ─────────── Substract 3 to prevent overflow.
@@ -57,7 +58,7 @@ while [ $installed != 1 ]; do
     echo -en "\033[${size}C"
 
     # 2. Clone repository into installation directory.
-    if sudo git -C /opt/checker clone ${REPO}  2> /dev/null; then
+    if sudo git -C /opt/checker clone ${BRANCH} ${REPO}  2> /dev/null; then
         echo -ne '\033[92m'
         printf '█%.0s' $(seq 0 $size)
         echo -ne '\033[m'
