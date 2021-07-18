@@ -194,7 +194,7 @@ class CLI_Checker(Cmd):
             print('└' + '─' * (columns - 2) + '┘')
             print('\033[m', end='')
             print("\033[6;3f", end='')
-            answer = str(input(question))
+            answer = str(input(question)).lower()
             while answer not in self.yes_no_list:
                 print("\033[5;0f", end='')
                 print('\033[92m', end='')
@@ -205,10 +205,10 @@ class CLI_Checker(Cmd):
                 print("\033[6;3f", end='')
                 answer = str(input("Please answer Yes or No: "))
 
-            if answer.lower() in ['yes', 'y']:
                 with open('/tmp/.hbnb_creds', 'w+') as f:
                     cred = 'Your Credentials have been stored in ' \
                            '/tmp/.hbnb_creds'
+            if answer in ['yes', 'y']:
                     json.dump({'email': email, 'api': api,
                                'password': password, 'token': ""}, f)
                     print("\033[5;0f", end='')
@@ -350,5 +350,6 @@ if __name__ == '__main__':
         s + '│ 🔥' + y + '     Diego Lopez     ' + rs + '🔥 │\n' +
         s + '│ 🔥' + y + '    Wiston Venera    ' + rs + '🔥 │\n' +
         s + '│ 🔥' + y + '  Leonardo Valencia  ' + rs + '🔥 │\n' +
+        s + '│ 🔥' + y + '    Gustavo Mejia    ' + rs + '🔥 │\n' +
         s + '└───────────────────────────┘\n'
         'Please run help to see available commands..')
