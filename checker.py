@@ -23,6 +23,21 @@ rs = '\033[m'  # Reset.
 size = get_terminal_size()
 columns = size.columns
 
+# debug credentials: This information should be in the .env file as
+# EMAIL=<debugging-email>
+# ENABLE=True/False
+# API=<your-api-key>
+# PASSWORD=<your-password>
+debug_cred = {
+    "enable": debug,
+    "email": getenv('EMAIL'),
+    "api": getenv('API'),
+    "password": getenv('PASSWORD')
+}
+
+if (debug is True):
+    print(debug_cred)
+
 
 class CLI_Checker(Cmd):
     """ Class for controling the main loop of the Checker's Console. """
@@ -140,6 +155,8 @@ class CLI_Checker(Cmd):
         print('└' + '─' * (columns - 2) + '┘')  # Variable, somehow...
         print("\033[6;3f", end='')
         email = str(input("Please enter your holberton e-mail: "))
+        if (debug is True):
+            email = debug_cred['email']
 
         print("\033[5;0f", end='')
         print('┌' + '─' * (columns - 2) + '┐')
@@ -147,17 +164,17 @@ class CLI_Checker(Cmd):
         print('└' + '─' * (columns - 2) + '┘')
         print("\033[6;3f", end='')
         api = str(input("Please enter your API key: "))
+        if (debug is True):
+            api = debug_cred['api']
 
         print("\033[5;0f", end='')
         print('┌' + '─' * (columns - 2) + '┐')
         print('│' + ' ' * (columns - 2) + '│')
         print('└' + '─' * (columns - 2) + '┘')
         print("\033[6;3f", end='')
-        if getenv('PSS'):
-            print('PSS environ variable was found...')
-            password = getenv('PSS')
-        else:
-            password = getpass("\033[6;3fPlease enter your password: ")
+        password = getpass("\033[6;3fPlease enter your password: ")
+        if (debug is True):
+            password = debug_cred['password']
 
         # Load custom mock loading Bar... - - - - - - - - - - - - - - - - - - |
         i = 0
