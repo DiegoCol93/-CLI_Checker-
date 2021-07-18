@@ -13,6 +13,8 @@ import json
 
 # GLOBAL VARIABLES
 PATH_CREDS = path.expanduser('~/.config/hbn/hbnb_creds')
+VERSION = 'v0.2 (tavo)'
+
 # Color format for text printing.
 y = '\033[38;5;220m'  # Yellow.
 g = '\033[92m'  # Green.
@@ -78,7 +80,7 @@ class CLI_Checker(Cmd):
         if (debug is False):
             welcome_l0 = "Hi"
             welcome_l1 = "This is the"
-            welcome_l2 = "CLI-Checker v0.01"
+            welcome_l2 = "CLI-Checker {}".format(VERSION)
             welcome_l3 = "We hope you enjoy"
             welcome_l4 = "Please"
             welcome_l5 = "Report any issues"
@@ -366,7 +368,8 @@ if __name__ == '__main__':
 
     CLI_Checker().cmdloop(
         s + '┌───────────────────────────┐\n' +
-        s + '│     CLI-Checker ' + g + 'v0.01' + rs + '     │\n' +
+        s + '│         CLI-Checker       │\n' +
+        s + '│         ' + g + VERSION + rs + '       │\n' +
         s + '│            by:            │\n' +
         s + '│ 🔥' + y + '     Diego Lopez     ' + rs + '🔥 │\n' +
         s + '│ 🔥' + y + '    Wiston Venera    ' + rs + '🔥 │\n' +
