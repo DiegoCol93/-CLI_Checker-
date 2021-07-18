@@ -1,13 +1,12 @@
-# ⚡ CLI_Checker ⚡
- > A Holberton School checker tool to avoid using your browser to check manaully every task of your current project.
+# ⚡ CLI_Checker (vTavo) ⚡
+ > A Holberton School checker tool to avoid using your browser to check manaully every task of your current project.<br>
+ > This is a fork of the original project by Diego Lopez. Please check his [page][CLI_Diego]
 
 ## How to install
 
-clone the repo and run the instalation script
+Run the instalation script
 ```console
-$ git clone https://github.com/DiegoCol93/CLI_Checker
-$ cd CLI_Checker
-$ ./install.sh
+$ bash <(curl -sL https://github.com/Athesto/CLI_Checker/raw/main/install.sh)
 $ checker
 ```
 the program are going to ask for:
@@ -16,9 +15,6 @@ the program are going to ask for:
    - it's in the __Intranet > Tools > Holberton's Intranet API key__
    - it's an HEX string of 32 chars ex. `123abc123abcdef99001122cdef12351`
  - your intranet's __password__ (it will be hidden so don't worry if you don't see the chars)
-
-after finishing the credentials it will ask for storing credentials
- - note: it has problem so write «__yes__» in lowercase
 
 ## How to use
 just run cecker in your terminal ant the checker terminal will start
@@ -80,7 +76,7 @@ Checking your code... 🎉
 - [Diego Lopez][@DiegoCol93]
 - [Wiston Venera][@wsvem]
 - [Leonardo Valencia][@4ions]
-- [Gustavo Mejía][@Athesto] (README)
+- [Gustavo Mejía][@Athesto]
 
 <!--links-->
 [api_link]: https://intranet.hbtn.io/dashboards/my_tools
@@ -88,3 +84,5 @@ Checking your code... 🎉
 [@wsvem]: https://github.com/wisvem
 [@4ions]: https://github.com/4ions
 [@DiegoCol93]: https://github.com/DiegoCol93
+[CLI_Diego]: https://github.com/DiegoCol93/CLI_Checker/
+
