@@ -2,6 +2,9 @@
  > A Holberton School checker tool to avoid using your browser to check manaully every task of your current project.<br>
  > This is a fork of the original project by Diego Lopez. Please check his [page][CLI_Diego]
 
+## Prerquisites
+You need the [tools][api_link] section available in the intranet
+ 
 ## How to install
 
 Run the instalation script
