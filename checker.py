@@ -13,6 +13,7 @@ import json
 
 # GLOBAL VARIABLES
 debug = getenv('DEBUG', False)
+PATH_CREDS = path.expanduser('~/.config/hbn/hbnb_creds')
 # Color format for text printing.
 y = '\033[38;5;220m'  # Yellow.
 g = '\033[92m'  # Green.
@@ -56,8 +57,8 @@ class CLI_Checker(Cmd):
     # Overrides the preloop class method. - - - - - - - - - - - - - - - - - - |
     def preloop(self):
         """ Method that runs before the main loop of the console. """
-        if path.exists('/tmp/.hbnb_creds'):
-            with open('/tmp/.hbnb_creds', 'r') as f:
+        if path.exists(PATH_CREDS):
+            with open(PATH_CREDS, 'r') as f:
                 creds = json.load(f)
                 email = creds['email']
                 api = creds['api']
@@ -225,10 +226,10 @@ class CLI_Checker(Cmd):
                 print("\033[6;3f", end='')
                 answer = str(input("Please answer Yes or No: "))
 
-                with open('/tmp/.hbnb_creds', 'w+') as f:
-                    cred = 'Your Credentials have been stored in ' \
-                           '/tmp/.hbnb_creds'
             if answer in ['yes', 'y']:
+                with open(PATH_CREDS, 'w+') as f:
+                    cred = 'Your Credentials have been stored in {}'
+                    cred.format(PATH_CREDS)
                     json.dump({'email': email, 'api': api,
                                'password': password, 'token': ""}, f)
                     print("\033[5;0f", end='')
@@ -240,7 +241,7 @@ class CLI_Checker(Cmd):
                     print("\033[6;{}f".format((columns - len(cred)) // 2),
                           end='')
                     cred = 'Your Credentials have been stored in '
-                    print(cred + g + '/tmp/.hbnb_creds' + rs)
+                    print(cred + g + " " + PATH_CREDS + " " + rs)
                     sleep(2)
                 print('')
 
