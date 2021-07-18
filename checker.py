@@ -14,8 +14,8 @@ import json
 # Color format for text printing.
 y = '\033[38;5;220m'  # Yellow.
 g = '\033[92m'  # Green.
-r = '\033[91m' # Red
-rs= '\033[m'  # Reset.
+r = '\033[91m'  # Red
+rs = '\033[m'  # Reset.
 
 # Get the size of the tty.
 size = get_terminal_size()
@@ -156,8 +156,6 @@ class CLI_Checker(Cmd):
         else:
             password = getpass("\033[6;3fPlease enter your password: ")
 
-
-
         # Load custom mock loading Bar... - - - - - - - - - - - - - - - - - - |
         i = 0
         print("\033[6;3f", end='')
@@ -180,7 +178,7 @@ class CLI_Checker(Cmd):
             print('\033[92m', end='')
             print("\033[5;0f", end='')
             print('┌' + '─' * (columns - 2) + '┐')
-            print('│' + success_space + success + success_space, end = '│')
+            print('│' + success_space + success + success_space, end='│')
             print('└' + '─' * (columns - 2) + '┘')
             print('\033[m', end='')
             print("\033[6;3f", end='')
@@ -244,23 +242,23 @@ class CLI_Checker(Cmd):
     # Project command - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_project(self, arg):
         """\n""" \
-        """  ┌\033[92m─\033[m Fetches and updates the current project.\n""" \
-        """  │\n""" \
-        """  └─┬\033[92m─\033[m Usage:\n""" \
-        """    │\n""" \
-        """    ├──\033[92m─\033[m project <\033[92mnum\033[m>\n""" \
-        """    │\n""" \
-        """    ├\033[92m─\033[m The \033[92mnum\033[m variable represents """ \
-        """the number from\n""" \
-        """    │  the project's url in your current Holberton proje""" \
-        """ct.\n""" \
-        """    │\n""" \
-        """    └─┬\033[92m─\033[m Example:\n""" \
-        """      │\n""" \
-        """      ├\033[92m─\033[m From: https://intranet.hbtn.io/projects""" \
-        """/\033[92m212\033[m\n""" \
-        """      │\n""" \
-        """      └\033[92m─\033[m Run: project \033[92m212\033[m\n""" \
+            """  ┌\033[92m─\033[m Fetches and updates the current project.\n""" \
+            """  │\n""" \
+            """  └─┬\033[92m─\033[m Usage:\n""" \
+            """    │\n""" \
+            """    ├──\033[92m─\033[m project <\033[92mnum\033[m>\n""" \
+            """    │\n""" \
+            """    ├\033[92m─\033[m The \033[92mnum\033[m variable represents """ \
+            """the number from\n""" \
+            """    │  the project's url in your current Holberton proje""" \
+            """ct.\n""" \
+            """    │\n""" \
+            """    └─┬\033[92m─\033[m Example:\n""" \
+            """      │\n""" \
+            """      ├\033[92m─\033[m From: https://intranet.hbtn.io/projects""" \
+            """/\033[92m212\033[m\n""" \
+            """      │\n""" \
+            """      └\033[92m─\033[m Run: project \033[92m212\033[m\n""" \
 
         self.task_dict = get_tasks(arg)
 
@@ -337,10 +335,12 @@ class CLI_Checker(Cmd):
         """ Quit command to exit the console. """
         return True
 
+
 if __name__ == '__main__':
     from os import get_terminal_size
 
-    space_around = ' ' * ((columns - len('┌───────────────────────────┐')) // 2)
+    space_around = ' ' * \
+        ((columns - len('┌───────────────────────────┐')) // 2)
     s = space_around
 
     CLI_Checker().cmdloop(
