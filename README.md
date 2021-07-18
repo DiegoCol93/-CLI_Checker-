@@ -74,7 +74,16 @@ Checking your code... 🎉
  - project: select project
  - check: slect task
 
-
+### How to uninstall
+To uninstall you only need to delete these files
+ - `/opt/checker`
+ - `/usr/local/bin/checker`
+ - credentials in `~/.config/hbn`
+```console
+$ sudo rm -rf /opt/checker/
+$ sudo rm /usr/local/bin/checker
+$ rm -rf ~/.config/hbn
+```
 ## Contributors
 - [Diego Lopez][@DiegoCol93]
 - [Wiston Venera][@wsvem]
