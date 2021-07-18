@@ -116,7 +116,7 @@ while [ $installed != 1 ]; do
 
     (( installed++ ))
     echo ""
-    echo -e "CLI_Checker \033[92mv0.01\033[m has been installed \033[92msuccesfully\033[m."
+    echo -e "CLI_Checker has been installed \033[92msuccesfully\033[m."
     echo -e "You may now run:\n"
     echo -e "\t\033[92mchecker\033[m\n"
     echo -e "In order to start the checker console."
