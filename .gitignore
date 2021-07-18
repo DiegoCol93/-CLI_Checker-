@@ -3,3 +3,4 @@ credentials
 *pyc
 .env
 .*.swp
+tmp/
