@@ -12,7 +12,6 @@ from cmd import Cmd
 import json
 
 # GLOBAL VARIABLES
-debug = getenv('DEBUG', False)
 PATH_CREDS = path.expanduser('~/.config/hbn/hbnb_creds')
 # Color format for text printing.
 y = '\033[38;5;220m'  # Yellow.
@@ -29,6 +28,7 @@ columns = size.columns
 # ENABLE=True/False
 # API=<your-api-key>
 # PASSWORD=<your-password>
+debug = bool(getenv('DEBUG', False))
 debug_cred = {
     "enable": debug,
     "email": getenv('EMAIL'),
