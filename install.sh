@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 REPO="https://github.com/Athesto/CLI_Checker.git"
-BRANCH="main"
+BRANCH=${BRANCH-"main"}
 
 cols=$(tput cols) # ───────────── Get the width of the terminal.
 cols=$(($cols - 3)) # ─────────── Substract 3 to prevent overflow.
