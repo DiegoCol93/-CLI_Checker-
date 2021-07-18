@@ -236,7 +236,7 @@ class CLI_Checker(Cmd):
                     cred = 'Your Credentials have been stored in {}'
                     cred.format(PATH_CREDS)
                     try:
-                        os.makedirs(path.dirname(PATH_CREDS))
+                        makedirs(path.dirname(PATH_CREDS))
                     except FileExistsError as f:
                         pass
                     json.dump({'email': email, 'api': api,
