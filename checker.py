@@ -5,7 +5,7 @@ from modules.show_result import show_result
 from modules.get_project import get_tasks
 from modules.get_auth import get_auth
 
-from os import path, get_terminal_size, getenv
+from os import path, get_terminal_size, getenv, makedirs
 from getpass import getpass
 from time import sleep
 from cmd import Cmd
@@ -13,6 +13,7 @@ import json
 
 # GLOBAL VARIABLES
 PATH_CREDS = path.expanduser('~/.config/hbn/hbnb_creds')
+PATH_TOKEN = '/tmp/.hbnb_auth_token'
 VERSION = 'v0.2 (tavo)'
 
 # Color format for text printing.
@@ -67,10 +68,12 @@ class CLI_Checker(Cmd):
                 password = creds['password']
                 get_auth(email, api, password)
         else:
-            if path.exists('/tmp/.hbnb_auth_token'):
+            if path.exists(PATH_TOKEN):
                 return
             else:
+                print('Credentials not found')
                 print('\033[2J', end='')
+
                 self.start_up()
 
     # 1st time startup method.- - - - - - - - - - - - - - - - - - - - - - - -|
@@ -232,6 +235,10 @@ class CLI_Checker(Cmd):
                 with open(PATH_CREDS, 'w+') as f:
                     cred = 'Your Credentials have been stored in {}'
                     cred.format(PATH_CREDS)
+                    try:
+                        os.makedirs(path.dirname(PATH_CREDS))
+                    except FileExistsError as f:
+                        pass
                     json.dump({'email': email, 'api': api,
                                'password': password, 'token': ""}, f)
                     print("\033[5;0f", end='')
