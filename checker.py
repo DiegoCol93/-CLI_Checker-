@@ -232,13 +232,13 @@ class CLI_Checker(Cmd):
                 answer = str(input("Please answer Yes or No: "))
 
             if answer in ['yes', 'y']:
+                try:
+                    makedirs(path.dirname(PATH_CREDS))
+                except FileExistsError as f:
+                    pass
                 with open(PATH_CREDS, 'w+') as f:
                     cred = 'Your Credentials have been stored in {}'
                     cred.format(PATH_CREDS)
-                    try:
-                        makedirs(path.dirname(PATH_CREDS))
-                    except FileExistsError as f:
-                        pass
                     json.dump({'email': email, 'api': api,
                                'password': password, 'token': ""}, f)
                     print("\033[5;0f", end='')
