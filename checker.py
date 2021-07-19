@@ -15,7 +15,7 @@ import json
 PATH_CREDS = path.expanduser('~/.config/hbn/hbnb_creds')
 PATH_TOKEN = '/tmp/.hbnb_auth_token'
 VERSION = 'v0.2 (tavo)'
-
+REPO = "https://github.com/Athesto/CLI_Checker"
 # Color format for text printing.
 y = '\033[38;5;220m'  # Yellow.
 g = '\033[92m'  # Green.
@@ -88,8 +88,8 @@ class CLI_Checker(Cmd):
             welcome_l4 = "Please"
             welcome_l5 = "Report any issues"
             welcome_l6 = "At:"
-            welcome_l7 = "https://github.com/DiegoCol93/CLI_Checker"
-            welcome_l8 = "or Follow us in Twitter:"
+            welcome_l7 = REPO
+            welcome_l8 = "Follow us in Twitter:"
             welcome_l9 = "https://twitter.com/LopezDfelo93"
             welcome_l10 = "https://twitter.com/wisvem"
             welcome_l11 = "https://twitter.com/leovalsan_dev"
@@ -109,7 +109,7 @@ class CLI_Checker(Cmd):
             welcome_s11 = ' ' * ((columns // 2) - 1 - len(welcome_l11) // 2)
 
             # Add color for the line 2 after spaces calculation above.
-            welcome_l2 = "CLI-Checker" + g + " v0.01" + rs
+            welcome_l2 = "CLI-Checker" + g + " " + VERSION + rs
 
             # Start of printing animation...
             # \033[2;0f resets the cursor to line 2 column 0 of the terminal.
