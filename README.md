@@ -3,8 +3,13 @@
  > This is a fork of the original project by Diego Lopez. Please check his [page][CLI_Diego]
 
 ## Prerquisites
-You need the [tools][api_link] section available in the intranet
- 
+You need the [tools][api_link] section available in the intranet. You can check
+if you have this icon in the left menu:
+
+<div style="text-align:center">
+<img align"center" src="/assets/tool_icon2.png"/>
+</div>
+
 ## How to install
 
 Run the instalation script
@@ -97,4 +102,6 @@ $ rm -rf ~/.config/hbn
 [@4ions]: https://github.com/4ions
 [@DiegoCol93]: https://github.com/DiegoCol93
 [CLI_Diego]: https://github.com/DiegoCol93/CLI_Checker/
+[tool_icon2]: https://github.com/Athesto/CLI_Checker/raw/main/assets/tool_icon2.png
+[tool_icon3]: /assets/tool_icon2.png
 
