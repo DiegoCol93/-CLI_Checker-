@@ -15,7 +15,7 @@ import signal  # manage Ctrl-C
 # GLOBAL VARIABLES
 PATH_CREDS = path.expanduser('~/.config/hbn/hbnb_creds')
 PATH_TOKEN = '/tmp/.hbnb_auth_token'
-VERSION = 'v0.2 (tavo)'
+VERSION = 'v0.3 (tavo)'
 REPO = "https://github.com/Athesto/CLI_Checker"
 # Color format for text printing.
 y = '\033[38;5;220m'  # Yellow.
@@ -368,7 +368,7 @@ class CLI_Checker(Cmd):
         except:
             print("\n\nstop")
         finally:
-            signal.signal(signal.SIGINT, handler=self._ctrl_c_ignore)
+            signal.signal(signal.SIGINT, handler=self._ctrl_c_ignored)
 
     def do_EOF(self, arg):
         """ Exits console when receiving an EOF (Ctrl-D)"""
