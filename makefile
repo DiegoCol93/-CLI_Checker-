@@ -1,3 +1,5 @@
+SHELL:=/bin/bash
+
 install:
 	bash <(curl -sL https://github.com/Athesto/CLI_Checker/raw/main/install.sh)
 
