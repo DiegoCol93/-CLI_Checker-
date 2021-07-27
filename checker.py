@@ -10,6 +10,7 @@ from getpass import getpass
 from time import sleep
 from cmd import Cmd
 import json
+import signal  # manage Ctrl-C
 
 # GLOBAL VARIABLES
 PATH_CREDS = path.expanduser('~/.config/hbn/hbnb_creds')
@@ -56,6 +57,16 @@ class CLI_Checker(Cmd):
     # Help custom instance variables.
     doc_header = "🤔 Currently availbale commands are: 🤔"
     ruler = y + "─" + rs
+    original_handler_ctrl_c = signal.getsignal(signal.SIGINT)
+
+    def __init__(self):
+        super().__init__()
+        signal.signal(signal.SIGINT, handler=self._ctrl_c_ignored)
+
+    def _ctrl_c_ignored(self, signal, frame):
+        '''Ignore SIGINT signal'''
+        print('^C')
+        print(self.prompt, end='', flush=True)
 
     # Overrides the preloop class method. - - - - - - - - - - - - - - - - - - |
     def preloop(self):
@@ -350,8 +361,14 @@ class CLI_Checker(Cmd):
             print('There is no task # {}'.format(arg))
             return
 
-        correction_id = request_correction(self.task_dict[arg][1])
-        show_result(correction_id, self.task_dict, arg)
+        try:
+            signal.signal(signal.SIGINT, handler=self.original_handler_ctrl_c)
+            correction_id = request_correction(self.task_dict[arg][1])
+            show_result(correction_id, self.task_dict, arg)
+        except:
+            print("\n\nstop")
+        finally:
+            signal.signal(signal.SIGINT, handler=self._ctrl_c_ignore)
 
     def do_EOF(self, arg):
         """ Exits console when receiving an EOF (Ctrl-D)"""
