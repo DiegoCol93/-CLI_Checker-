@@ -354,7 +354,8 @@ class CLI_Checker(Cmd):
         show_result(correction_id, self.task_dict, arg)
 
     def do_EOF(self, arg):
-        """ Exits console when receiving an EOF. """
+        """ Exits console when receiving an EOF (Ctrl-D)"""
+        print("goodbye")
         return True
 
     def emptyline(self):
