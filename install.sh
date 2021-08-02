@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+REPO="https://github.com/Athesto/CLI_Checker.git"
+BRANCH=${BRANCH-"main"}
 
 cols=$(tput cols) # ───────────── Get the width of the terminal.
 cols=$(($cols - 3)) # ─────────── Substract 3 to prevent overflow.
@@ -56,7 +58,7 @@ while [ $installed != 1 ]; do
     echo -en "\033[${size}C"
 
     # 2. Clone repository into installation directory.
-    if sudo git -C /opt/checker clone https://github.com/DiegoCol93/CLI_Checker.git 2> /dev/null; then
+    if sudo git -C /opt/checker clone -b ${BRANCH} ${REPO}  2> /dev/null; then
         echo -ne '\033[92m'
         printf '█%.0s' $(seq 0 $size)
         echo -ne '\033[m'
@@ -115,7 +117,7 @@ while [ $installed != 1 ]; do
 
     (( installed++ ))
     echo ""
-    echo -e "CLI_Checker \033[92mv0.01\033[m has been installed \033[92msuccesfully\033[m."
+    echo -e "CLI_Checker has been installed \033[92msuccesfully\033[m."
     echo -e "You may now run:\n"
     echo -e "\t\033[92mchecker\033[m\n"
     echo -e "In order to start the checker console."

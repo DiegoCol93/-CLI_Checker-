@@ -5,21 +5,43 @@ from modules.show_result import show_result
 from modules.get_project import get_tasks
 from modules.get_auth import get_auth
 
-from os import path, get_terminal_size, getenv
+from os import path, get_terminal_size, getenv, makedirs
 from getpass import getpass
 from time import sleep
 from cmd import Cmd
 import json
+import signal  # manage Ctrl-C
 
+# GLOBAL VARIABLES
+PATH_CREDS = path.expanduser('~/.config/hbn/hbnb_creds')
+PATH_TOKEN = '/tmp/.hbnb_auth_token'
+VERSION = 'v0.4 (tavo)'
+REPO = "https://github.com/Athesto/CLI_Checker"
 # Color format for text printing.
 y = '\033[38;5;220m'  # Yellow.
 g = '\033[92m'  # Green.
-r = '\033[91m' # Red
-rs= '\033[m'  # Reset.
+r = '\033[91m'  # Red
+rs = '\033[m'  # Reset.
 
 # Get the size of the tty.
 size = get_terminal_size()
 columns = size.columns
+
+# debug credentials: This information should be in the .env file as
+# EMAIL=<debugging-email>
+# ENABLE=True/False
+# API=<your-api-key>
+# PASSWORD=<your-password>
+debug = bool(getenv('DEBUG', False))
+debug_cred = {
+    "enable": debug,
+    "email": getenv('EMAIL'),
+    "api": getenv('API'),
+    "password": getenv('PASSWORD')
+}
+
+if (debug is True):
+    print(debug_cred)
 
 
 class CLI_Checker(Cmd):
@@ -35,100 +57,113 @@ class CLI_Checker(Cmd):
     # Help custom instance variables.
     doc_header = "🤔 Currently availbale commands are: 🤔"
     ruler = y + "─" + rs
+    original_handler_ctrl_c = signal.getsignal(signal.SIGINT)
+
+    def __init__(self):
+        super().__init__()
+        signal.signal(signal.SIGINT, self._ctrl_c_ignored)
+
+    def _ctrl_c_ignored(self, signal, frame):
+        '''Ignore SIGINT signal'''
+        print('^C')
+        print(self.prompt, end='', flush=True)
 
     # Overrides the preloop class method. - - - - - - - - - - - - - - - - - - |
     def preloop(self):
         """ Method that runs before the main loop of the console. """
-        if path.exists('/tmp/.hbnb_creds'):
-            with open('/tmp/.hbnb_creds', 'r') as f:
+        if path.exists(PATH_CREDS):
+            with open(PATH_CREDS, 'r') as f:
                 creds = json.load(f)
                 email = creds['email']
                 api = creds['api']
                 password = creds['password']
                 get_auth(email, api, password)
         else:
-            if path.exists('/tmp/.hbnb_auth_token'):
+            if path.exists(PATH_TOKEN):
                 return
             else:
+                print('Credentials not found')
                 print('\033[2J', end='')
+
                 self.start_up()
 
     # 1st time startup method.- - - - - - - - - - - - - - - - - - - - - - - -|
     def start_up(self):
         """ Start-up method for getting and storing the user's credentials. """
         # Strings for 1st time welcome pre-message.
-        welcome_l0 = "Hi"
-        welcome_l1 = "This is the"
-        welcome_l2 = "CLI-Checker v0.01"
-        welcome_l3 = "We hope you enjoy"
-        welcome_l4 = "Please"
-        welcome_l5 = "Report any issues"
-        welcome_l6 = "At:"
-        welcome_l7 = "https://github.com/DiegoCol93/CLI_Checker"
-        welcome_l8 = "or Follow us in Twitter:"
-        welcome_l9 = "https://twitter.com/LopezDfelo93"
-        welcome_l10 = "https://twitter.com/wisvem"
-        welcome_l11 = "https://twitter.com/leovalsan_dev"
+        if (debug is False):
+            welcome_l0 = "Hi"
+            welcome_l1 = "This is the"
+            welcome_l2 = "CLI-Checker {}".format(VERSION)
+            welcome_l3 = "We hope you enjoy"
+            welcome_l4 = "Please"
+            welcome_l5 = "Report any issues"
+            welcome_l6 = "At:"
+            welcome_l7 = REPO
+            welcome_l8 = "Follow us in Twitter:"
+            welcome_l9 = "https://twitter.com/LopezDfelo93"
+            welcome_l10 = "https://twitter.com/wisvem"
+            welcome_l11 = "https://twitter.com/leovalsan_dev"
 
-        # Calculate the space around each line's welcome message.
-        welcome_s0 = ' ' * ((columns // 2) - 1 - len(welcome_l0) // 2)
-        welcome_s1 = ' ' * ((columns // 2) - 1 - len(welcome_l1) // 2)
-        welcome_s2 = ' ' * ((columns // 2) - 1 - len(welcome_l2) // 2)
-        welcome_s3 = ' ' * ((columns // 2) - 1 - len(welcome_l3) // 2)
-        welcome_s4 = ' ' * ((columns // 2) - 1 - len(welcome_l4) // 2)
-        welcome_s5 = ' ' * ((columns // 2) - 1 - len(welcome_l5) // 2)
-        welcome_s6 = ' ' * ((columns // 2) - 1 - len(welcome_l6) // 2)
-        welcome_s7 = ' ' * ((columns // 2) - 1 - len(welcome_l7) // 2)
-        welcome_s8 = ' ' * ((columns // 2) - 1 - len(welcome_l8) // 2)
-        welcome_s9 = ' ' * ((columns // 2) - 1 - len(welcome_l9) // 2)
-        welcome_s10 = ' ' * ((columns // 2) - 1 - len(welcome_l10) // 2)
-        welcome_s11 = ' ' * ((columns // 2) - 1 - len(welcome_l11) // 2)
+            # Calculate the space around each line's welcome message.
+            welcome_s0 = ' ' * ((columns // 2) - 1 - len(welcome_l0) // 2)
+            welcome_s1 = ' ' * ((columns // 2) - 1 - len(welcome_l1) // 2)
+            welcome_s2 = ' ' * ((columns // 2) - 1 - len(welcome_l2) // 2)
+            welcome_s3 = ' ' * ((columns // 2) - 1 - len(welcome_l3) // 2)
+            welcome_s4 = ' ' * ((columns // 2) - 1 - len(welcome_l4) // 2)
+            welcome_s5 = ' ' * ((columns // 2) - 1 - len(welcome_l5) // 2)
+            welcome_s6 = ' ' * ((columns // 2) - 1 - len(welcome_l6) // 2)
+            welcome_s7 = ' ' * ((columns // 2) - 1 - len(welcome_l7) // 2)
+            welcome_s8 = ' ' * ((columns // 2) - 1 - len(welcome_l8) // 2)
+            welcome_s9 = ' ' * ((columns // 2) - 1 - len(welcome_l9) // 2)
+            welcome_s10 = ' ' * ((columns // 2) - 1 - len(welcome_l10) // 2)
+            welcome_s11 = ' ' * ((columns // 2) - 1 - len(welcome_l11) // 2)
 
-        # Add color for the line 2 after spaces calculation above.
-        welcome_l2 = "CLI-Checker" + g + " v0.01" + rs
+            # Add color for the line 2 after spaces calculation above.
+            welcome_l2 = "CLI-Checker" + g + " " + VERSION + rs
 
-        # Start of printing animation...
-        # \033[2;0f resets the cursor to line 2 column 0 of the terminal.
-        print("\033[5;0f", end='')
-        print("\033[2;0f", end='')
-        print(welcome_s0 + welcome_l0 + welcome_s0)
-        sleep(2)
+            # Start of printing animation...
+            # \033[2;0f resets the cursor to line 2 column 0 of the terminal.
+            print("\033[5;0f", end='')
+            print("\033[2;0f", end='')
+            print(welcome_s0 + welcome_l0 + welcome_s0)
+            sleep(2)
 
-        print(welcome_s1 + welcome_l1 + welcome_s1)
-        sleep(1.5)
+            print(welcome_s1 + welcome_l1 + welcome_s1)
+            sleep(1.5)
 
-        print(welcome_s2 + welcome_l2 + welcome_s2)
-        sleep(1.5)
+            print(welcome_s2 + welcome_l2 + welcome_s2)
+            sleep(1.5)
 
-        print("\033[2;0f", end='')
-        print(welcome_s3 + welcome_l3 + welcome_s3)
-        sleep(1.5)
+            print("\033[2;0f", end='')
+            print(welcome_s3 + welcome_l3 + welcome_s3)
+            sleep(1.5)
 
-        print(welcome_s4 + welcome_l4 + welcome_s4)
-        sleep(1.5)
+            print(welcome_s4 + welcome_l4 + welcome_s4)
+            sleep(1.5)
 
-        print(welcome_s5 + welcome_l5 + welcome_s5)
-        sleep(1.5)
+            print(welcome_s5 + welcome_l5 + welcome_s5)
+            sleep(1.5)
 
-        print("\033[2;0f", end='')
-        print(welcome_s6 + welcome_l6 + welcome_s6)
-        sleep(1.5)
+            print("\033[2;0f", end='')
+            print(welcome_s6 + welcome_l6 + welcome_s6)
+            sleep(1.5)
 
-        print(welcome_s7 + welcome_l7 + welcome_s7)
-        sleep(1.5)
+            print(welcome_s7 + welcome_l7 + welcome_s7)
+            sleep(1.5)
 
-        print(welcome_s8 + welcome_l8 + welcome_s8)
-        sleep(1.5)
+            print(welcome_s8 + welcome_l8 + welcome_s8)
+            sleep(1.5)
 
-        print("\033[2;0f", end='')
-        print(welcome_s9 + welcome_l9 + welcome_s9)
-        sleep(1.5)
+            print("\033[2;0f", end='')
+            print(welcome_s9 + welcome_l9 + welcome_s9)
+            sleep(1.5)
 
-        print(welcome_s10 + welcome_l10 + welcome_s10)
-        sleep(1.5)
+            print(welcome_s10 + welcome_l10 + welcome_s10)
+            sleep(1.5)
 
-        print(welcome_s11 + welcome_l11 + welcome_s11)
-        sleep(1.5)
+            print(welcome_s11 + welcome_l11 + welcome_s11)
+            sleep(1.5)
 
         # Get user credentials with input box.- - - - - - - - - - - - - - - - |
         print("\033[5;0f", end='')
@@ -137,6 +172,8 @@ class CLI_Checker(Cmd):
         print('└' + '─' * (columns - 2) + '┘')  # Variable, somehow...
         print("\033[6;3f", end='')
         email = str(input("Please enter your holberton e-mail: "))
+        if (debug is True):
+            email = debug_cred['email']
 
         print("\033[5;0f", end='')
         print('┌' + '─' * (columns - 2) + '┐')
@@ -144,19 +181,17 @@ class CLI_Checker(Cmd):
         print('└' + '─' * (columns - 2) + '┘')
         print("\033[6;3f", end='')
         api = str(input("Please enter your API key: "))
+        if (debug is True):
+            api = debug_cred['api']
 
         print("\033[5;0f", end='')
         print('┌' + '─' * (columns - 2) + '┐')
         print('│' + ' ' * (columns - 2) + '│')
         print('└' + '─' * (columns - 2) + '┘')
         print("\033[6;3f", end='')
-        if getenv('PSS'):
-            print('PSS environ variable was found...')
-            password = getenv('PSS')
-        else:
-            password = getpass("\033[6;3fPlease enter your password: ")
-
-
+        password = getpass("\033[6;3fPlease enter your password: ")
+        if (debug is True):
+            password = debug_cred['password']
 
         # Load custom mock loading Bar... - - - - - - - - - - - - - - - - - - |
         i = 0
@@ -180,7 +215,7 @@ class CLI_Checker(Cmd):
             print('\033[92m', end='')
             print("\033[5;0f", end='')
             print('┌' + '─' * (columns - 2) + '┐')
-            print('│' + success_space + success + success_space, end = '│')
+            print('│' + success_space + success + success_space, end='│')
             print('└' + '─' * (columns - 2) + '┘')
             print('\033[m', end='')
             print("\033[6;3f", end='')
@@ -196,7 +231,7 @@ class CLI_Checker(Cmd):
             print('└' + '─' * (columns - 2) + '┘')
             print('\033[m', end='')
             print("\033[6;3f", end='')
-            answer = str(input(question))
+            answer = str(input(question)).lower()
             while answer not in self.yes_no_list:
                 print("\033[5;0f", end='')
                 print('\033[92m', end='')
@@ -207,10 +242,14 @@ class CLI_Checker(Cmd):
                 print("\033[6;3f", end='')
                 answer = str(input("Please answer Yes or No: "))
 
-            if answer.lower() in ['yes', 'y']:
-                with open('/tmp/.hbnb_creds', 'w+') as f:
-                    cred = 'Your Credentials have been stored in ' \
-                           '/tmp/.hbnb_creds'
+            if answer in ['yes', 'y']:
+                try:
+                    makedirs(path.dirname(PATH_CREDS))
+                except FileExistsError as f:
+                    pass
+                with open(PATH_CREDS, 'w+') as f:
+                    cred = 'Your Credentials have been stored in {}'
+                    cred.format(PATH_CREDS)
                     json.dump({'email': email, 'api': api,
                                'password': password, 'token': ""}, f)
                     print("\033[5;0f", end='')
@@ -222,7 +261,7 @@ class CLI_Checker(Cmd):
                     print("\033[6;{}f".format((columns - len(cred)) // 2),
                           end='')
                     cred = 'Your Credentials have been stored in '
-                    print(cred + g + '/tmp/.hbnb_creds' + rs)
+                    print(cred + g + " " + PATH_CREDS + " " + rs)
                     sleep(2)
                 print('')
 
@@ -244,23 +283,23 @@ class CLI_Checker(Cmd):
     # Project command - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
     def do_project(self, arg):
         """\n""" \
-        """  ┌\033[92m─\033[m Fetches and updates the current project.\n""" \
-        """  │\n""" \
-        """  └─┬\033[92m─\033[m Usage:\n""" \
-        """    │\n""" \
-        """    ├──\033[92m─\033[m project <\033[92mnum\033[m>\n""" \
-        """    │\n""" \
-        """    ├\033[92m─\033[m The \033[92mnum\033[m variable represents """ \
-        """the number from\n""" \
-        """    │  the project's url in your current Holberton proje""" \
-        """ct.\n""" \
-        """    │\n""" \
-        """    └─┬\033[92m─\033[m Example:\n""" \
-        """      │\n""" \
-        """      ├\033[92m─\033[m From: https://intranet.hbtn.io/projects""" \
-        """/\033[92m212\033[m\n""" \
-        """      │\n""" \
-        """      └\033[92m─\033[m Run: project \033[92m212\033[m\n""" \
+            """  ┌\033[92m─\033[m Fetches and updates the current project.\n""" \
+            """  │\n""" \
+            """  └─┬\033[92m─\033[m Usage:\n""" \
+            """    │\n""" \
+            """    ├──\033[92m─\033[m project <\033[92mnum\033[m>\n""" \
+            """    │\n""" \
+            """    ├\033[92m─\033[m The \033[92mnum\033[m variable represents """ \
+            """the number from\n""" \
+            """    │  the project's url in your current Holberton proje""" \
+            """ct.\n""" \
+            """    │\n""" \
+            """    └─┬\033[92m─\033[m Example:\n""" \
+            """      │\n""" \
+            """      ├\033[92m─\033[m From: https://intranet.hbtn.io/projects""" \
+            """/\033[92m212\033[m\n""" \
+            """      │\n""" \
+            """      └\033[92m─\033[m Run: project \033[92m212\033[m\n""" \
 
         self.task_dict = get_tasks(arg)
 
@@ -322,11 +361,18 @@ class CLI_Checker(Cmd):
             print('There is no task # {}'.format(arg))
             return
 
-        correction_id = request_correction(self.task_dict[arg][1])
-        show_result(correction_id, self.task_dict, arg)
+        try:
+            signal.signal(signal.SIGINT, self.original_handler_ctrl_c)
+            correction_id = request_correction(self.task_dict[arg][1])
+            show_result(correction_id, self.task_dict, arg)
+        except:
+            print("\n\nstop")
+        finally:
+            signal.signal(signal.SIGINT, self._ctrl_c_ignored)
 
     def do_EOF(self, arg):
-        """ Exits console when receiving an EOF. """
+        """ Exits console when receiving an EOF (Ctrl-D)"""
+        print("goodbye")
         return True
 
     def emptyline(self):
@@ -337,18 +383,22 @@ class CLI_Checker(Cmd):
         """ Quit command to exit the console. """
         return True
 
+
 if __name__ == '__main__':
     from os import get_terminal_size
 
-    space_around = ' ' * ((columns - len('┌───────────────────────────┐')) // 2)
+    space_around = ' ' * \
+        ((columns - len('┌───────────────────────────┐')) // 2)
     s = space_around
 
     CLI_Checker().cmdloop(
         s + '┌───────────────────────────┐\n' +
-        s + '│     CLI-Checker ' + g + 'v0.01' + rs + '     │\n' +
+        s + '│         CLI-Checker       │\n' +
+        s + '│         ' + g + VERSION + rs + '       │\n' +
         s + '│            by:            │\n' +
         s + '│ 🔥' + y + '     Diego Lopez     ' + rs + '🔥 │\n' +
         s + '│ 🔥' + y + '    Wiston Venera    ' + rs + '🔥 │\n' +
         s + '│ 🔥' + y + '  Leonardo Valencia  ' + rs + '🔥 │\n' +
+        s + '│ 🔥' + y + '    Gustavo Mejia    ' + rs + '🔥 │\n' +
         s + '└───────────────────────────┘\n'
         'Please run help to see available commands..')

@@ -1,3 +1,6 @@
 *__pychache__
 credentials
 *pyc
+.env
+.*.swp
+tmp/
