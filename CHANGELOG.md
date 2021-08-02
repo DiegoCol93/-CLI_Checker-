@@ -4,6 +4,7 @@
 ## v0.4
 ### Fixed
  - python3.4 had problems with singal.signal()
+ - manage project if there is no arguments
 
 ## v0.3
 ### Added
