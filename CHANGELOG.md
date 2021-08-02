@@ -1,6 +1,10 @@
 # Changelog
 > here you can see every change between versions
 
+## v0.4
+### Fixed
+ - python3.4 had problems with singal.signal()
+
 ## v0.3
 ### Added
  - Handle Ctrl-c in checker
